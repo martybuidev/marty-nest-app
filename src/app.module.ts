@@ -1,5 +1,5 @@
 
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -20,16 +20,16 @@ import { DataSource } from 'typeorm';
     }),
   ],
 })
+
 export class AppModule implements OnModuleInit{
     constructor(private dataSource: DataSource) {}
 
     onModuleInit() {
       if (this.dataSource.isInitialized){
-        console.log('Connect to db successfully');
+        Logger.log('Connect to db successfully');
       }
       else{
-        console.log('Fail to connect');
-        
+        Logger.log('Fail to connect');
       }
     }
 }
