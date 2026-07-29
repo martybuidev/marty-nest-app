@@ -1,34 +1,9 @@
-import { Logger, Module, OnModuleInit } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { Module } from '@nestjs/common';
+import { AppConfigModule } from './config/appConfig.module';
+import { DatabaseModule } from './config/databaseConfig.module';
 
+// only import module in this file, no config here
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: (process.env.DB_TYPE || 'postgres') as any,
-      host: process.env.DB_HOST || 'localhost',
-      port: (process.env.DB_PORT || 5432) as number,
-
-      username: process.env.DB_USERNAME || 'username',
-      password: process.env.DB_PASSWORD || 'password',
-      database: process.env.DB_NAME || 'dbname',  
-      entities: [],
-      synchronize: true,
-    }),
-  ],
+  imports: [AppConfigModule, DatabaseModule],
 })
-
-export class AppModule implements OnModuleInit{
-    constructor(private dataSource: DataSource) {}
-
-    onModuleInit() {
-      if (this.dataSource.isInitialized){
-        Logger.log('Connect to db successfully');
-      }
-      else{
-        Logger.log('Fail to connect');
-      }
-    }
-}
+export class AppModule {}
