@@ -1,23 +1,5 @@
 import { registerAs } from '@nestjs/config';
 
-export interface AppConfig {
-  port: number;
-}
-
-export interface DatabaseConfig {
-  type: string;
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  databaseName: string;
-}
-
-export interface Configuration {
-  app: AppConfig;
-  database: DatabaseConfig;
-}
-
 export const appConfig = registerAs('app', () => ({
   port: parseInt(process.env.PORT!) || 3001,
 }));

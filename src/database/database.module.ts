@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppConfigService } from './appConfig.service';
+import { AppConfigService } from '../config/appConfig.service';
 
 @Module({
   imports: [
@@ -10,7 +10,7 @@ import { AppConfigService } from './appConfig.service';
         const dbConfig = appConfigService.database;
 
         return {
-          type: dbConfig.type as any,
+          type: dbConfig.type,
           host: dbConfig.host,
           port: dbConfig.port,
           username: dbConfig.username,
