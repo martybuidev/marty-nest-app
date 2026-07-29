@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NestConfigServire } from '@nestjs/config';
-import { AppConfig, Configuration, DatabaseConfig } from 'src/interfaces';
+import { IAppConfig, IConfiguration, IDatabaseConfig } from 'src/interfaces';
 @Injectable()
 export class ConfigService {
   constructor(
-    private readonly configService: NestConfigServire<Configuration, true>,
+    private readonly configService: NestConfigServire<IConfiguration, true>,
   ) {}
 
-  get app(): AppConfig {
+  get app(): IAppConfig {
     return this.configService.get('app', { infer: true });
   }
 
-  get database(): DatabaseConfig {
+  get database(): IDatabaseConfig {
     return this.configService.get('database', { infer: true });
   }
 }

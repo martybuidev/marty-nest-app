@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from 'src/config/config.service';
-import { DatabaseConfig } from 'src/interfaces';
+import { IDatabaseConfig } from 'src/interfaces';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (appConfigService: ConfigService): DatabaseConfig => {
+      useFactory: (appConfigService: ConfigService): IDatabaseConfig => {
         const dbConfig = appConfigService.database;
 
         return {

@@ -1,6 +1,6 @@
-import { AppConfig, DatabaseConfig } from './';
+import { IAppConfig, IDatabaseConfig } from './';
 
-export interface Configuration {
-  app: AppConfig;
-  database: DatabaseConfig;
+export interface IConfiguration {
+  app: IAppConfig;
+  database: IDatabaseConfig;
 }
