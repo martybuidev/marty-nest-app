@@ -33,5 +33,3 @@ export class AppModule implements OnModuleInit{
       }
     }
 }
-
-
