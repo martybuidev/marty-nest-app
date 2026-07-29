@@ -1,4 +1,4 @@
-import { AppConfig, DatabaseConfig} from "./";
+import { AppConfig, DatabaseConfig } from './';
 
 export interface Configuration {
   app: AppConfig;

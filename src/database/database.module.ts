@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppConfigService } from '../config/appConfig.service';
+import { ConfigService } from 'src/config/config.service';
+import { DatabaseConfig } from 'src/interfaces';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      inject: [AppConfigService],
-      useFactory: (appConfigService: AppConfigService) => {
+      inject: [ConfigService],
+      useFactory: (appConfigService: ConfigService): DatabaseConfig => {
         const dbConfig = appConfigService.database;
 
         return {
@@ -15,7 +16,7 @@ import { AppConfigService } from '../config/appConfig.service';
           port: dbConfig.port,
           username: dbConfig.username,
           password: dbConfig.password,
-          database: dbConfig.databaseName,
+          databaseName: dbConfig.databaseName,
         };
       },
     }),

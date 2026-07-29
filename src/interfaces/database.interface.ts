@@ -1,5 +1,4 @@
-import { DatabaseType } from "src/types";
-
+import { DatabaseType } from 'typeorm';
 export interface DatabaseConfig {
   type: DatabaseType;
   host: string;
