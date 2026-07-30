@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-// import { DatabaseType } from 'typeorm';
-
 export const databaseSchema = z.object({
   type: z.enum(['postgres', 'mysql']).default('postgres'),
   host: z.string().min(1).default('localhost'),
