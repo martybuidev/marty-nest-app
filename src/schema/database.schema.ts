@@ -9,4 +9,4 @@ export const databaseSchema = z.object({
   databaseName: z.string().min(1).default('dbname'),
 });
 
-export type DatabaseConfigType = z.infer<typeof databaseSchema>;
+export type TDatabaseConfig = z.infer<typeof databaseSchema>;
