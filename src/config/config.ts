@@ -1,10 +1,11 @@
 import { registerAs } from '@nestjs/config';
-import { appSchema, databaseSchema } from 'src/schema';
+
+import { appSchema, databaseSchema } from '@/schema';
 
 export const appConfig = registerAs('app', () => {
   return appSchema.parse({
     port: parseInt(process.env.PORT!) || 3001,
-  })
+  });
 });
 
 export const databaseConfig = registerAs('database', () => {
@@ -15,5 +16,5 @@ export const databaseConfig = registerAs('database', () => {
     username: process.env.DB_USERNAME || 'username',
     password: process.env.DB_PASSWORD || 'password',
     databaseName: process.env.DB_NAME || 'dbname',
-  })
+  });
 });

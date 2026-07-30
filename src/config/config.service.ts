@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NestConfigServire } from '@nestjs/config';
-import { AppConfigType, DatabaseConfigType } from 'src/schema';
+
+import { AppConfigType, DatabaseConfigType } from '@/schema';
+
 @Injectable()
 export class ConfigService {
   constructor(
-    private readonly configService: NestConfigServire< {app: AppConfigType, database: DatabaseConfigType}, true>,
+    private readonly configService: NestConfigServire<
+      { app: AppConfigType; database: DatabaseConfigType },
+      true
+    >,
   ) {}
 
   get app(): AppConfigType {
