@@ -6,7 +6,7 @@ export const databaseSchema = z.object({
   port: z.coerce.number().int().positive().default(5432),
   username: z.string().min(1).default('username'),
   password: z.string().min(1).default('password'),
-  databaseName: z.string().min(1).default('dbname'),
+  database: z.string().min(1).default('dbname'),
 });
 
 export type TDatabaseConfig = z.infer<typeof databaseSchema>;
