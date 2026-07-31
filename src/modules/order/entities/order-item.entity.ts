@@ -1,14 +1,6 @@
-import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Check, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+import { CustomBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 import { Order } from './order.entity';
@@ -16,10 +8,7 @@ import { Order } from './order.entity';
 @Entity('order_items')
 @Check(`"quantity" >= 0`)
 @Check(`"price" >= 0`)
-export class OrderItem {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class OrderItem extends CustomBaseEntity {
   @Column({ name: 'product_id' })
   productId: number;
 
@@ -41,10 +30,4 @@ export class OrderItem {
 
   @Column({ type: 'decimal', precision: 20, scale: 2 })
   price: number;
-
-  @CreateDateColumn({ name: 'created_at' })
-  created_at: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updated_at: Date;
 }

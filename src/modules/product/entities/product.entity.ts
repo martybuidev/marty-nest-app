@@ -1,25 +1,20 @@
 import {
   Check,
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
+import { CustomBaseEntity } from '@/common/entity/base.entity';
 import { Category } from '@/modules/category/entities/category.entity';
 import { Image } from '@/modules/image/entities/image.entity';
 import { OrderItem } from '@/modules/order/entities/order-item.entity';
 
 @Entity('products')
 @Check(`"price" >= 0 and "stock_quantity" >= 0`)
-export class Product {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Product extends CustomBaseEntity {
   @Column({ name: 'category_id' })
   categoryId: number;
 
@@ -55,10 +50,4 @@ export class Product {
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems: OrderItem[];
-
-  @CreateDateColumn({ name: 'created_at' })
-  created_at: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updated_at: Date;
 }

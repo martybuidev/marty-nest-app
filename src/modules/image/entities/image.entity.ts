@@ -1,20 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+import { CustomBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('images')
-export class Image {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Image extends CustomBaseEntity {
   @Column({ name: 'product_id' })
   productId: number;
 
@@ -32,10 +22,4 @@ export class Image {
 
   @Column({ type: 'varchar', length: 50 })
   alt: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  created_at: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updated_at: Date;
 }

@@ -1,22 +1,13 @@
-import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Check, Column, Entity, OneToMany } from 'typeorm';
+
+import { CustomBaseEntity } from '@/common/entity/base.entity';
+import { EOrderStatus } from '@/common/enum/order-status.enum';
 
 import { OrderItem } from './order-item.entity';
-import { EOrderStatus } from './order-status.enum';
 
 @Entity('orders')
 @Check(`"total" >= 0`)
-export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Order extends CustomBaseEntity {
   @Column({ name: 'customer_phone', type: 'varchar', length: 11 })
   customerPhone: string;
 
@@ -38,10 +29,4 @@ export class Order {
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
-
-  @CreateDateColumn({ name: 'created_at' })
-  created_at: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updated_at: Date;
 }

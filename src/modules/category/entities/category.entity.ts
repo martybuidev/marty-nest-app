@@ -1,19 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
+import { CustomBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('categories')
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Category extends CustomBaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
@@ -25,10 +16,4 @@ export class Category {
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];
-
-  @CreateDateColumn({ name: 'created_at' })
-  created_at: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updated_at: Date;
 }
