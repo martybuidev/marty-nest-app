@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import path from 'path';
+
 import { ConfigService } from '@/config/config.service';
-import { Category } from '@/modules/category/entities/category.entity';
-import { Image } from '@/modules/image/entities/image.entity';
-import { OrderItem } from '@/modules/order/entities/order-item.entity';
-import { Order } from '@/modules/order/entities/order.entity';
-import { Product } from '@/modules/product/entities/product.entity';
 
 @Module({
   imports: [
@@ -21,7 +18,9 @@ import { Product } from '@/modules/product/entities/product.entity';
           username: dbConfig.username,
           password: dbConfig.password,
           database: dbConfig.database,
-          entities: [Category, Image, Order, OrderItem, Product],
+          entities: [
+            path.join(__dirname, '..', 'modules', '**', '*.entity.{js,ts}'),
+          ],
           synchronize: false,
         };
       },
