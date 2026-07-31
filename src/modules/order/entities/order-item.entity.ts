@@ -1,6 +1,6 @@
 import { Check, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { CustomBaseEntity } from '@/common/entity/base.entity';
+import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 import { Order } from './order.entity';
@@ -8,7 +8,7 @@ import { Order } from './order.entity';
 @Entity('order_items')
 @Check(`"quantity" >= 0`)
 @Check(`"price" >= 0`)
-export class OrderItem extends CustomBaseEntity {
+export class OrderItem extends CommonBaseEntity {
   @Column({ name: 'product_id' })
   productId: number;
 

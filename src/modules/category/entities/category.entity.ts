@@ -1,10 +1,10 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
-import { CustomBaseEntity } from '@/common/entity/base.entity';
+import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('categories')
-export class Category extends CustomBaseEntity {
+export class Category extends CommonBaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 

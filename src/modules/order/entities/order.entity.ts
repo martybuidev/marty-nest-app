@@ -1,13 +1,13 @@
 import { Check, Column, Entity, OneToMany } from 'typeorm';
 
-import { CustomBaseEntity } from '@/common/entity/base.entity';
+import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { EOrderStatus } from '@/common/enum/order-status.enum';
 
 import { OrderItem } from './order-item.entity';
 
 @Entity('orders')
 @Check(`"total" >= 0`)
-export class Order extends CustomBaseEntity {
+export class Order extends CommonBaseEntity {
   @Column({ name: 'customer_phone', type: 'varchar', length: 11 })
   customerPhone: string;
 

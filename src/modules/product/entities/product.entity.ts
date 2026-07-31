@@ -7,14 +7,14 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { CustomBaseEntity } from '@/common/entity/base.entity';
+import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Category } from '@/modules/category/entities/category.entity';
 import { Image } from '@/modules/image/entities/image.entity';
 import { OrderItem } from '@/modules/order/entities/order-item.entity';
 
 @Entity('products')
 @Check(`"price" >= 0 and "stock_quantity" >= 0`)
-export class Product extends CustomBaseEntity {
+export class Product extends CommonBaseEntity {
   @Column({ name: 'category_id' })
   categoryId: number;
 

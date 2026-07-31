@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { CustomBaseEntity } from '@/common/entity/base.entity';
+import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('images')
-export class Image extends CustomBaseEntity {
+export class Image extends CommonBaseEntity {
   @Column({ name: 'product_id' })
   productId: number;
 

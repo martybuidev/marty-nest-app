@@ -8,8 +8,6 @@ export class CategoryMigration1785467314116 implements MigrationInterface {
         "name" character varying(255) NOT NULL,
         "slug" character varying(255) NOT NULL,
         "description" text,
-        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
-        "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
         CONSTRAINT "UQ_categories_slug" UNIQUE ("slug"),
         CONSTRAINT "PK_categories_id" PRIMARY KEY ("id")
       )
