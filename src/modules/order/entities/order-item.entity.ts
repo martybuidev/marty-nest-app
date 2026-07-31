@@ -1,10 +1,12 @@
 import {
   Check,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { Product } from '@/modules/product/entities/product.entity';
@@ -39,4 +41,10 @@ export class OrderItem {
 
   @Column({ type: 'decimal', precision: 20, scale: 2 })
   price: number;
+
+  @CreateDateColumn({ name: 'created_at' })
+  created_at: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updated_at: Date;
 }
