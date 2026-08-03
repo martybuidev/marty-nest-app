@@ -17,11 +17,10 @@ export class CategoryService {
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
-    const createdCategory = this.categoryRepository.create(createCategoryDto);
     const slug = generateSlug(createCategoryDto.name);
 
     const existingCategory = await this.categoryRepository.findOneBy([
-      { name: createdCategory.name },
+      { name: createCategoryDto.name },
       { slug },
     ]);
 
@@ -31,6 +30,10 @@ export class CategoryService {
         message: `A category with "${slug}" slug is taken! Please choose a different name.`,
         error: 'Slug Conflict',
       });
+    const createdCategory = this.categoryRepository.create({
+      ...createCategoryDto,
+      slug,
+    });
 
     return await this.categoryRepository.save(createdCategory);
   }
@@ -45,6 +48,23 @@ export class CategoryService {
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoryRepository.findOneByOrFail({ id });
+
+    if (updateCategoryDto.name && updateCategoryDto.name !== category.name) {
+      const newSlug = generateSlug(updateCategoryDto.name);
+      const existingCategory = await this.categoryRepository.findOneBy([
+        { name: updateCategoryDto.name },
+        { slug: newSlug },
+      ]);
+
+      if (existingCategory && existingCategory.id != id)
+        throw new ConflictException({
+          statusCode: 409,
+          message: `A category with "${newSlug}" slug is taken! Please choose a different name.`,
+          error: 'Slug Conflict',
+        });
+
+      category.slug = newSlug;
+    }
 
     const updatedCategory = this.categoryRepository.merge(
       category,
