@@ -5,6 +5,7 @@ import { AppModule } from '@/app.module';
 import { ConfigService } from '@/config/config.service';
 
 import { AllExceptionsFilter } from './common/filter/all-exceptions.filter';
+import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   const appConfig = app.get(ConfigService).app;
   await app.listen(appConfig.port);

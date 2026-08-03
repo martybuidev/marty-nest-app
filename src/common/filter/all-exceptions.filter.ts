@@ -27,9 +27,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof EntityNotFoundError) {
       this.logger.error(`Entity Not Found ${exception.message}`);
       return response.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
         message: 'Resource not found',
         error: 'Not found',
-        statusCode: HttpStatus.NOT_FOUND,
       });
     }
 
@@ -42,9 +42,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     this.logger.error(`Unhandled Exception: ${message}`, stack);
 
     return response.status(status).json({
+      statusCode: status,
       message: 'Internal server error',
       error: 'Internal Server Error',
-      statusCode: status,
     });
   }
 }

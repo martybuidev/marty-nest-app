@@ -26,9 +26,11 @@ export class CategoryService {
     ]);
 
     if (existingCategory)
-      throw new ConflictException(
-        `A category with "${slug}" slug is taken! please take a different name`,
-      );
+      throw new ConflictException({
+        statusCode: 409,
+        message: `A category with "${slug}" slug is taken! Please choose a different name.`,
+        error: 'Slug Conflict',
+      });
 
     return await this.categoryRepository.save(createdCategory);
   }
