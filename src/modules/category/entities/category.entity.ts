@@ -1,11 +1,11 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
 
 import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('categories')
 export class Category extends CommonBaseEntity {
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, unique: true })
   name: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
@@ -16,4 +16,15 @@ export class Category extends CommonBaseEntity {
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];
+
+  @BeforeInsert()
+  generateSlug() {
+    if (this.name) {
+      this.slug = this.name
+        .toLowerCase()
+        .trim()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+    }
+  }
 }
