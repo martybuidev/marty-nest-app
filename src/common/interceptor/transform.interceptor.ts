@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IApiSuccessResponse } from '../type';
@@ -16,17 +15,13 @@ export class TransformInterceptor<T> implements NestInterceptor<
   T,
   IApiSuccessResponse<T>
 > {
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<IApiSuccessResponse<T>> {
+  intercept(context: ExecutionContext, next: CallHandler) {
     const statusCode: number = context
       .switchToHttp()
       .getResponse<Response>().statusCode;
     return next.handle().pipe(
-      map((data: T) => {
+      map((data: T): IApiSuccessResponse<T> => {
         return {
-          success: true,
           statusCode,
           message: 'Success',
           data,

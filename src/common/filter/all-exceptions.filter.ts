@@ -25,7 +25,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const res = exception.getResponse();
 
       const body = {
-        success: false,
         ...(typeof res === 'object'
           ? res
           : { statusCode, message: res, error: 'Bad request' }),
@@ -36,7 +35,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof EntityNotFoundError) {
       this.logger.error(`Entity Not Found ${exception.message}`);
       const body: IApiErrorResponse = {
-        success: false,
         statusCode: HttpStatus.NOT_FOUND,
         message: 'Resource not found',
         error: 'Not found',
@@ -53,7 +51,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     this.logger.error(`Unhandled Exception: ${message}`, stack);
 
     const body: IApiErrorResponse = {
-      success: false,
       statusCode: status,
       message: 'Internal server error',
       error: 'Internal Server Error',
