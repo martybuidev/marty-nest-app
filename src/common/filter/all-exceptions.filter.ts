@@ -5,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 
 import { Response } from 'express';
@@ -26,16 +25,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     if (exception instanceof EntityNotFoundError) {
-      const notFound = new NotFoundException(exception.message);
-      return response.status(HttpStatus.NOT_FOUND).json(notFound.getResponse());
+      this.logger.error(`Entity Not Found ${exception.message}`);
+      return response.status(HttpStatus.NOT_FOUND).json({
+        message: 'Resource not found',
+        error: 'Not found',
+        statusCode: HttpStatus.NOT_FOUND,
+      });
     }
 
     const status = HttpStatus.INTERNAL_SERVER_ERROR;
-    const errorResponse = {
-      message: 'Internal server error',
-      error: 'Internal Server Error',
-      statusCode: status,
-    };
 
     const message =
       exception instanceof Error ? exception.message : 'Unknown error';
@@ -43,6 +41,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     this.logger.error(`Unhandled Exception: ${message}`, stack);
 
-    return response.status(status).json(errorResponse);
+    return response.status(status).json({
+      message: 'Internal server error',
+      error: 'Internal Server Error',
+      statusCode: status,
+    });
   }
 }
