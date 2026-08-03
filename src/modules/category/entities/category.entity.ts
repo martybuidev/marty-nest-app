@@ -1,6 +1,7 @@
 import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
 
 import { CommonBaseEntity } from '@/common/entity/base.entity';
+import { generateSlug } from '@/common/util/slug.util';
 import { Product } from '@/modules/product/entities/product.entity';
 
 @Entity('categories')
@@ -18,13 +19,9 @@ export class Category extends CommonBaseEntity {
   products: Product[];
 
   @BeforeInsert()
-  generateSlug() {
+  generateSlugFromName() {
     if (this.name) {
-      this.slug = this.name
-        .toLowerCase()
-        .trim()
-        .replace(/ /g, '-')
-        .replace(/[^\w-]+/g, '');
+      this.slug = generateSlug(this.name);
     }
   }
 }

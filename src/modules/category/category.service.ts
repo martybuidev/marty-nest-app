@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
+import { generateSlug } from '@/common/util/slug.util';
+
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ResponseCategoryDto } from './dto/response-category-dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -18,14 +20,16 @@ export class CategoryService {
 
   async create(createCategoryDto: CreateCategoryDto) {
     const createdCategory = this.categoryRepository.create(createCategoryDto);
+    const slug = generateSlug(createCategoryDto.name);
 
-    const existingCategory = await this.categoryRepository.findOneBy({
-      name: createdCategory.name,
-    });
+    const existingCategory = await this.categoryRepository.findOneBy([
+      { name: createdCategory.name },
+      { slug },
+    ]);
 
     if (existingCategory)
       throw new ConflictException(
-        `Category with name ${createdCategory.name} has already existed`,
+        `A category with "${slug}" slug is taken! please take a different name`,
       );
 
     const savedCategory = await this.categoryRepository.save(createdCategory);
