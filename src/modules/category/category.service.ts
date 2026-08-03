@@ -1,13 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
 import { generateSlug } from '@/common/util/slug.util';
 
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { ResponseCategoryDto } from './dto/response-category-dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 
@@ -32,27 +30,15 @@ export class CategoryService {
         `A category with "${slug}" slug is taken! please take a different name`,
       );
 
-    const savedCategory = await this.categoryRepository.save(createdCategory);
-
-    return plainToInstance(ResponseCategoryDto, savedCategory, {
-      excludeExtraneousValues: true,
-    });
+    return await this.categoryRepository.save(createdCategory);
   }
 
   async findAll() {
-    const categories = await this.categoryRepository.find();
-
-    return plainToInstance(ResponseCategoryDto, categories, {
-      excludeExtraneousValues: true,
-    });
+    return await this.categoryRepository.find();
   }
 
   async findOne(id: number) {
-    const category = await this.categoryRepository.findOneByOrFail({ id });
-
-    return plainToInstance(ResponseCategoryDto, category, {
-      excludeExtraneousValues: true,
-    });
+    return await this.categoryRepository.findOneByOrFail({ id });
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
@@ -62,11 +48,8 @@ export class CategoryService {
       category,
       updateCategoryDto,
     );
-    const savedCategory = await this.categoryRepository.save(updatedCategory);
 
-    return plainToInstance(ResponseCategoryDto, savedCategory, {
-      excludeExtraneousValues: true,
-    });
+    return await this.categoryRepository.save(updatedCategory);
   }
 
   async remove(id: number) {
