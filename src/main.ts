@@ -4,8 +4,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
 import { ConfigService } from '@/config/config.service';
 
-import { AllExceptionsFilter } from './common/filter/all-exceptions.filter';
-import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import { AllExceptionsFilter } from './common/filter';
+import { TransformInterceptor } from './common/interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

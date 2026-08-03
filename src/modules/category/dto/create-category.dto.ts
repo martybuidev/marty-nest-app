@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-import { trim } from '@/common/decorator/trim.decorator';
+import { trim } from '@/common/decorator';
 
 export class CreateCategoryDto {
   @IsString()

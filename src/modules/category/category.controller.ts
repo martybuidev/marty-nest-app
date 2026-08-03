@@ -9,7 +9,7 @@ import {
   Post,
 } from '@nestjs/common';
 
-import { Serialize } from '@/common/decorator/serialize.decorator';
+import { Serialize } from '@/common/decorator';
 
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';

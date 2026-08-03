@@ -10,6 +10,8 @@ import {
 import { Response } from 'express';
 import { EntityNotFoundError } from 'typeorm';
 
+import { IApiErrorResponse } from '../type';
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -19,18 +21,27 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     if (exception instanceof HttpException) {
-      const status = exception.getStatus();
+      const statusCode = exception.getStatus();
       const res = exception.getResponse();
-      return response.status(status).json(res);
+
+      const body = {
+        success: false,
+        ...(typeof res === 'object'
+          ? res
+          : { statusCode, message: res, error: 'Bad request' }),
+      };
+      return response.status(statusCode).json(body);
     }
 
     if (exception instanceof EntityNotFoundError) {
       this.logger.error(`Entity Not Found ${exception.message}`);
-      return response.status(HttpStatus.NOT_FOUND).json({
+      const body: IApiErrorResponse = {
+        success: false,
         statusCode: HttpStatus.NOT_FOUND,
         message: 'Resource not found',
         error: 'Not found',
-      });
+      };
+      return response.status(HttpStatus.NOT_FOUND).json(body);
     }
 
     const status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -41,10 +52,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     this.logger.error(`Unhandled Exception: ${message}`, stack);
 
-    return response.status(status).json({
+    const body: IApiErrorResponse = {
+      success: false,
       statusCode: status,
       message: 'Internal server error',
       error: 'Internal Server Error',
-    });
+    };
+    return response.status(status).json(body);
   }
 }

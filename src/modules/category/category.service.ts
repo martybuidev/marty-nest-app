@@ -25,11 +25,9 @@ export class CategoryService {
     ]);
 
     if (existingCategory)
-      throw new ConflictException({
-        statusCode: 409,
-        message: `A category with "${slug}" slug is taken! Please choose a different name.`,
-        error: 'Slug Conflict',
-      });
+      throw new ConflictException(
+        `A category with "${slug}" slug is taken! Please choose a different name.`,
+      );
     const createdCategory = this.categoryRepository.create({
       ...createCategoryDto,
       slug,
@@ -56,12 +54,10 @@ export class CategoryService {
         { slug: newSlug },
       ]);
 
-      if (existingCategory && existingCategory.id != id)
-        throw new ConflictException({
-          statusCode: 409,
-          message: `A category with "${newSlug}" slug is taken! Please choose a different name.`,
-          error: 'Slug Conflict',
-        });
+      if (existingCategory && existingCategory.id !== id)
+        throw new ConflictException(
+          `A category with "${newSlug}" slug is taken! Please choose a different name.`,
+        );
 
       category.slug = newSlug;
     }
