@@ -23,13 +23,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       const statusCode = exception.getStatus();
       const res = exception.getResponse();
-
-      const body = {
-        ...(typeof res === 'object'
-          ? res
-          : { statusCode, message: res, error: 'Bad request' }),
-      };
-      return response.status(statusCode).json(body);
+      return response.status(statusCode).json(res);
     }
 
     if (exception instanceof EntityNotFoundError) {
