@@ -10,7 +10,7 @@ import {
 import { Request, Response } from 'express';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
-import { ELogStatus } from '@/common/enum';
+import { LOG_MESSAGE } from '@/common/constant';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -24,14 +24,14 @@ export class LoggingInterceptor implements NestInterceptor {
     const requestId = request.headers['x-request-id'] as string;
     const userAgent = request.get('user-agent') || '';
     const { method, originalUrl } = request;
-    const { statusCode } = response;
     const startTime = Date.now();
 
     return next.handle().pipe(
       tap(() => {
+        const { statusCode } = response;
         const msResponseTime = Date.now() - startTime;
         this.logger.debug({
-          logStatus: ELogStatus.SUCCESS,
+          logStatus: LOG_MESSAGE.SUCCESS,
           requestId,
           statusCode,
           method,
@@ -41,6 +41,7 @@ export class LoggingInterceptor implements NestInterceptor {
         });
       }),
       catchError((err: Error) => {
+        const { statusCode } = response;
         const msResponseTime = Date.now() - startTime;
         let errorDetails: string = err.message;
 
@@ -61,7 +62,7 @@ export class LoggingInterceptor implements NestInterceptor {
           }
         }
         this.logger.error({
-          type: ELogStatus.FAIL,
+          logStatus: LOG_MESSAGE.FAIL,
           requestId,
           statusCode,
           method,

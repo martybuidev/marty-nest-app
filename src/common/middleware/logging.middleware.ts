@@ -2,7 +2,7 @@ import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
-import { ELogStatus } from '../enum';
+import { LOG_MESSAGE } from '@/common/constant';
 
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
@@ -15,7 +15,7 @@ export class LoggingMiddleware implements NestMiddleware {
     const userAgent = req.get('user-agent') || '';
 
     this.logger.log({
-      logStatus: ELogStatus.INCOMMING,
+      logStatus: LOG_MESSAGE.INCOMING,
       requestId,
       method,
       originalUrl,

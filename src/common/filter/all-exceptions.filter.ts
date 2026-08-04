@@ -10,7 +10,8 @@ import {
 import { Response } from 'express';
 import { EntityNotFoundError } from 'typeorm';
 
-import { IApiErrorResponse } from '../type';
+import { ERROR_MESSAGE } from '@/common/constant';
+import { IApiErrorResponse } from '@/common/type';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -23,14 +24,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       const statusCode = exception.getStatus();
       const res = exception.getResponse();
+
       return response.status(statusCode).json(res);
     }
 
     if (exception instanceof EntityNotFoundError) {
       const body: IApiErrorResponse = {
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'Resource not found',
-        error: 'Not found',
+        message: ERROR_MESSAGE.NOT_FOUND,
+        error: ERROR_MESSAGE.NOT_FOUND,
       };
       return response.status(HttpStatus.NOT_FOUND).json(body);
     }
@@ -45,8 +47,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const body: IApiErrorResponse = {
       statusCode: status,
-      message: 'Internal server error',
-      error: 'Internal Server Error',
+      message: ERROR_MESSAGE.INTERNAL,
+      error: ERROR_MESSAGE.INTERNAL,
     };
     return response.status(status).json(body);
   }
