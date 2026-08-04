@@ -2,6 +2,8 @@ import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
+import { ELogStatus } from '../enum';
+
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
   private readonly logger = new Logger('HTTP');
@@ -11,9 +13,15 @@ export class LoggingMiddleware implements NestMiddleware {
 
     const { method, originalUrl, ip } = req;
     const userAgent = req.get('user-agent') || '';
-    this.logger.log(
-      `[INCOMMING] [${requestId}] ${method} ${originalUrl} - IP: ${ip} - Agent: ${userAgent}`,
-    );
+
+    this.logger.log({
+      logStatus: ELogStatus.INCOMMING,
+      requestId,
+      method,
+      originalUrl,
+      ip,
+      userAgent,
+    });
     next();
   }
 }

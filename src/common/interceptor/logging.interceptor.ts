@@ -10,6 +10,8 @@ import {
 import { Request, Response } from 'express';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
+import { ELogStatus } from '@/common/enum';
+
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger('HTTP');
@@ -27,13 +29,19 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        const delay = Date.now() - startTime;
-        this.logger.debug(
-          `[SUCCESS] [${requestId}] ${statusCode}  ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} `,
-        );
+        const msResponseTime = Date.now() - startTime;
+        this.logger.debug({
+          logStatus: ELogStatus.SUCCESS,
+          requestId,
+          statusCode,
+          method,
+          originalUrl,
+          msResponseTime,
+          userAgent,
+        });
       }),
       catchError((err: Error) => {
-        const delay = Date.now() - startTime;
+        const msResponseTime = Date.now() - startTime;
         let errorDetails: string = err.message;
 
         if (err instanceof HttpException) {
@@ -52,9 +60,16 @@ export class LoggingInterceptor implements NestInterceptor {
             }
           }
         }
-        this.logger.error(
-          `[FAIL] [${requestId}] ${statusCode} ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} - ${errorDetails}`,
-        );
+        this.logger.error({
+          type: ELogStatus.FAIL,
+          requestId,
+          statusCode,
+          method,
+          originalUrl,
+          msResponseTime,
+          userAgent,
+          errorDetails,
+        });
         return throwError(() => err);
       }),
     );
