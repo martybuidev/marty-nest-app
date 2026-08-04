@@ -2,6 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import compression from 'compression';
+import helmet from 'helmet';
+
 import { AppModule } from '@/app.module';
 import { ConfigService } from '@/config/config.service';
 
@@ -17,6 +20,9 @@ async function bootstrap() {
     credentials: false,
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
+
+  app.use(helmet());
+  app.use(compression());
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
@@ -37,7 +43,6 @@ async function bootstrap() {
     .setDescription('API documentation for Marty Nest Application')
     .setVersion('1.0')
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 

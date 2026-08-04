@@ -3,7 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@/config/config.module';
 import { DatabaseModule } from '@/database/database.module';
 
-import { LoggingMiddleware } from './common/middleware/logging';
+import { LoggingMiddleware, RequestIdMiddleware } from './common/middleware';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
 
@@ -15,6 +15,6 @@ import { ProductModule } from './modules/product/product.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes('*');
+    consumer.apply(RequestIdMiddleware, LoggingMiddleware).forRoutes('*');
   }
 }

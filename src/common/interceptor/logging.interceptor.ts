@@ -16,6 +16,7 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
+    const requestId = request.headers['x-request-id'] as string;
     const userAgent = request.get('user-agent') || '';
     const { method, originalUrl } = request;
     const startTime = Date.now();
@@ -24,13 +25,13 @@ export class LoggingInterceptor implements NestInterceptor {
       tap(() => {
         const delay = Date.now() - startTime;
         this.logger.debug(
-          `[SUCCESS] ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} `,
+          `[SUCCESS] [${requestId}] ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} `,
         );
       }),
       catchError((err: Error) => {
         const delay = Date.now() - startTime;
         this.logger.error(
-          `[FAIL] ${method} ${originalUrl} ${delay}ms - Agent: ${userAgent} - ${err}`,
+          `[FAIL] [${requestId}] ${method} ${originalUrl} ${delay}ms - Agent: ${userAgent} - ${err}`,
         );
         return throwError(() => err);
       }),
