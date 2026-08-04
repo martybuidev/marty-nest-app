@@ -1,4 +1,0 @@
-export const ERROR_MESSAGE = {
-  NOT_FOUND: 'RESOURCE NOT FOUND',
-  INTERNAL: 'INTERNAL SERVER ERROR',
-} as const;
