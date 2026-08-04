@@ -27,7 +27,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     if (exception instanceof EntityNotFoundError) {
-      this.logger.error(`Entity Not Found ${exception.message}`);
       const body: IApiErrorResponse = {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'Resource not found',

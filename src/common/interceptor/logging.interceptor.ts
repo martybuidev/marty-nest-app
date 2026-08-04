@@ -1,6 +1,7 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   Injectable,
   Logger,
   NestInterceptor,
@@ -30,8 +31,26 @@ export class LoggingInterceptor implements NestInterceptor {
       }),
       catchError((err: Error) => {
         const delay = Date.now() - startTime;
+        let errorDetails: string = err.message;
+
+        if (err instanceof HttpException) {
+          const res = err.getResponse();
+
+          if (typeof res === 'string') {
+            errorDetails = res;
+          } else if (typeof res === 'object' && res !== null) {
+            const resObj = res as Record<string, unknown>;
+            const message = resObj.message;
+
+            if (Array.isArray(message)) {
+              errorDetails = message.map(String).join(', ');
+            } else if (typeof message === 'string') {
+              errorDetails = message;
+            }
+          }
+        }
         this.logger.error(
-          `[FAIL] [${requestId}] ${method} ${originalUrl} ${delay}ms - Agent: ${userAgent} - ${err}`,
+          `[FAIL] [${requestId}] ${method} ${originalUrl} ${delay}ms - Agent: ${userAgent} - ${errorDetails}`,
         );
         return throwError(() => err);
       }),
