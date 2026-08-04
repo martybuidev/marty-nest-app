@@ -13,12 +13,11 @@ import { LoggingInterceptor, TransformInterceptor } from './common/interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
   app.enableCors({
-    origin: 'http://localhost:3000',
-    method: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: false,
-    allowedHeaders: 'Content-Type, Accept, Authorization',
+    origin: configService.cors.origin,
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'x-request-id'],
   });
 
   app.use(helmet());
@@ -46,7 +45,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const appConfig = app.get(ConfigService).app;
-  await app.listen(appConfig.port);
+  await app.listen(configService.app.port);
 }
 void bootstrap();

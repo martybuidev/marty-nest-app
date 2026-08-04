@@ -1,7 +1,12 @@
 import { registerAs } from '@nestjs/config';
 
-import { appSchema, databaseSchema } from '@/schema';
+import { appSchema, crosSchema, databaseSchema } from '@/schema';
 
+export const crosConfig = registerAs('cros', () => {
+  return crosSchema.parse({
+    origin: process.env.CROSS_ORIGIN,
+  });
+});
 export const appConfig = registerAs('app', () => {
   return appSchema.parse({
     port: process.env.PORT,

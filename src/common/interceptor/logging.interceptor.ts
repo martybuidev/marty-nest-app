@@ -17,16 +17,19 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
+    const response = ctx.getResponse<Response>();
+
     const requestId = request.headers['x-request-id'] as string;
     const userAgent = request.get('user-agent') || '';
     const { method, originalUrl } = request;
+    const { statusCode } = response;
     const startTime = Date.now();
 
     return next.handle().pipe(
       tap(() => {
         const delay = Date.now() - startTime;
         this.logger.debug(
-          `[SUCCESS] [${requestId}] ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} `,
+          `[SUCCESS] [${requestId}] ${statusCode}  ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} `,
         );
       }),
       catchError((err: Error) => {
@@ -50,7 +53,7 @@ export class LoggingInterceptor implements NestInterceptor {
           }
         }
         this.logger.error(
-          `[FAIL] [${requestId}] ${method} ${originalUrl} ${delay}ms - Agent: ${userAgent} - ${errorDetails}`,
+          `[FAIL] [${requestId}] ${statusCode} ${method} ${originalUrl} ${delay} ms - Agent: ${userAgent} - ${errorDetails}`,
         );
         return throwError(() => err);
       }),

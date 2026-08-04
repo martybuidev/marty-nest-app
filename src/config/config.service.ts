@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NestConfigServire } from '@nestjs/config';
 
-import { TAppConfig, TDatabaseConfig } from '@/schema';
+import { TAppConfig, TCrosConfig, TDatabaseConfig } from '@/schema';
 
 @Injectable()
 export class ConfigService {
   constructor(
     private readonly configService: NestConfigServire<
-      { app: TAppConfig; database: TDatabaseConfig },
+      { app: TAppConfig; database: TDatabaseConfig; cros: TCrosConfig },
       true
     >,
   ) {}
@@ -18,5 +18,9 @@ export class ConfigService {
 
   get database(): TDatabaseConfig {
     return this.configService.get('database', { infer: true });
+  }
+
+  get cors(): TCrosConfig {
+    return this.configService.get('cros', { infer: true });
   }
 }
