@@ -2,6 +2,7 @@ import {
   CallHandler,
   ExecutionContext,
   HttpException,
+  HttpStatus,
   Injectable,
   Logger,
   NestInterceptor,
@@ -9,8 +10,7 @@ import {
 
 import { Request, Response } from 'express';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-
-import { LOG_MESSAGE } from '@/common/constant';
+import { EntityNotFoundError } from 'typeorm';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -31,7 +31,6 @@ export class LoggingInterceptor implements NestInterceptor {
         const { statusCode } = response;
         const msResponseTime = Date.now() - startTime;
         this.logger.debug({
-          logStatus: LOG_MESSAGE.SUCCESS,
           requestId,
           statusCode,
           method,
@@ -41,11 +40,13 @@ export class LoggingInterceptor implements NestInterceptor {
         });
       }),
       catchError((err: Error) => {
-        const { statusCode } = response;
         const msResponseTime = Date.now() - startTime;
+
+        let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         let errorDetails: string = err.message;
 
         if (err instanceof HttpException) {
+          statusCode = err.getStatus();
           const res = err.getResponse();
 
           if (typeof res === 'string') {
@@ -60,9 +61,10 @@ export class LoggingInterceptor implements NestInterceptor {
               errorDetails = message;
             }
           }
+        } else if (err instanceof EntityNotFoundError) {
+          statusCode = HttpStatus.NOT_FOUND;
         }
         this.logger.error({
-          logStatus: LOG_MESSAGE.FAIL,
           requestId,
           statusCode,
           method,
