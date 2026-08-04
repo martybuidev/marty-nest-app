@@ -6,10 +6,17 @@ import { AppModule } from '@/app.module';
 import { ConfigService } from '@/config/config.service';
 
 import { AllExceptionsFilter } from './common/filter';
-import { TransformInterceptor } from './common/interceptor';
+import { LoggingInterceptor, TransformInterceptor } from './common/interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    method: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: false,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
@@ -19,7 +26,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(
+    new TransformInterceptor(),
+    new LoggingInterceptor(),
+  );
   app.useGlobalFilters(new AllExceptionsFilter());
 
   const config = new DocumentBuilder()
