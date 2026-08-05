@@ -16,7 +16,7 @@ export class CreateCategoryDto {
   name: string;
 
   @ApiProperty({
-    example: 'Electronic devices for househol',
+    example: 'Electronic devices for households',
     description: 'Description for category',
   })
   @IsString()
