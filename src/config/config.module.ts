@@ -1,7 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 
-import { appConfig, crosConfig, databaseConfig } from './config';
+import {
+  appConfig,
+  crosConfig,
+  databaseConfig,
+  r2PresignConfig,
+} from './config';
 import { ConfigService } from './config.service';
 
 @Global()
@@ -10,7 +15,7 @@ import { ConfigService } from './config.service';
     NestConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [appConfig, databaseConfig, crosConfig],
+      load: [appConfig, databaseConfig, crosConfig, r2PresignConfig],
     }),
   ],
   providers: [ConfigService],

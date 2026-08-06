@@ -7,6 +7,7 @@ import { LoggingMiddleware, RequestIdMiddleware } from './common/middleware';
 import { RateLimitingModule } from './config/rate-limiting.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 // only import module in this file, no config here
 @Module({
@@ -16,6 +17,7 @@ import { ProductModule } from './modules/product/product.module';
     RateLimitingModule,
     CategoryModule,
     ProductModule,
+    UploadModule,
   ],
 })
 export class AppModule implements NestModule {

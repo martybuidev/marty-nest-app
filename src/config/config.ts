@@ -1,6 +1,11 @@
 import { registerAs } from '@nestjs/config';
 
-import { appSchema, corsSchema, databaseSchema } from '@/schema';
+import {
+  appSchema,
+  corsSchema,
+  databaseSchema,
+  r2PresignSchema,
+} from '@/schema';
 
 export const crosConfig = registerAs('cors', () => {
   return corsSchema.parse({
@@ -24,5 +29,20 @@ export const databaseConfig = registerAs('database', () => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+  });
+});
+
+export const r2PresignConfig = registerAs('r2Presign', () => {
+  return r2PresignSchema.parse({
+    maxSizeBytes: process.env.R2_MAX_SIZE_BYTES,
+    allowedTypes: process.env.R2_ALLOWED_TYPES,
+    region: process.env.R2_REGION,
+    accountId: process.env.R2_ACCOUNT_ID,
+    endPoint: process.env.R2_ENDPOINT,
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+    bucket: process.env.R2_BUCKET,
+    publicBaseUrl: process.env.R2_PUBLIC_BASE_URL,
+    expiresIn: process.env.R2_EXPIRES_IN,
   });
 });
