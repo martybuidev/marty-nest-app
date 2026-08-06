@@ -4,6 +4,7 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { extname, parse } from 'path';
 
+import { FILE_SIZE } from '@/common/constant';
 import { generateSlug } from '@/common/util';
 import { ConfigService } from '@/config/config.service';
 
@@ -40,7 +41,7 @@ export class UploadService {
     const key = `product/${Date.now()}-${safeName}${ext}`;
 
     const publicUrl = `${this.publicBaseUrl}/${key}`;
-    const toMegaBytes = this.maxSizeBytes / (1024 * 1024);
+    const toMegaBytes = this.maxSizeBytes / FILE_SIZE.MEGABYTE;
 
     if (size > this.maxSizeBytes)
       throw new BadRequestException(
