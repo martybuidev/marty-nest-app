@@ -46,11 +46,12 @@ export class CategoryService {
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoryRepository.findOneByOrFail({ id });
+    const newName = updateCategoryDto.name;
 
-    if (updateCategoryDto.name && updateCategoryDto.name !== category.name) {
-      const newSlug = generateSlug(updateCategoryDto.name);
+    if (newName && newName !== category.name) {
+      const newSlug = generateSlug(newName);
       const existingCategory = await this.categoryRepository.findOneBy([
-        { name: updateCategoryDto.name },
+        { name: newName },
         { slug: newSlug },
       ]);
 

@@ -14,12 +14,20 @@ export class Image extends CommonBaseEntity {
   @JoinColumn({ name: 'product_id' })
   product: Product;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  name?: string;
+
   @Column({ type: 'text' })
   url: string;
 
-  @Column({ type: 'varchar', length: 50 })
-  name: string;
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  alt?: string;
 
-  @Column({ type: 'varchar', length: 50 })
-  alt: string;
+  @Column({
+    name: 'is_primary',
+    type: 'boolean',
+    nullable: true,
+    default: false,
+  })
+  isPrimary?: boolean;
 }

@@ -17,8 +17,6 @@ import { ProductModule } from './modules/product/product.module';
     CategoryModule,
     ProductModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
