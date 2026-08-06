@@ -35,7 +35,7 @@ export const databaseConfig = registerAs('database', () => {
 export const storagePresignConfig = registerAs('storagePresign', () => {
   return storagePresignSchema.parse({
     maxSizeBytes: process.env.STORAGE_EXPIRES_IN_MAX_SIZE_BYTES,
-    allowedTypes: process.env.STORAGE_EXPIRES_IN_ALLOWED_TYPES,
+    allowedTypes: process.env.STORAGE_ALLOWED_TYPES,
     region: process.env.STORAGE_REGION,
     accountId: process.env.STORAGE_ACCOUNT_ID,
     endPoint: process.env.STORAGE_ENDPOINT,
