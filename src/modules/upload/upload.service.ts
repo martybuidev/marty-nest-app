@@ -18,21 +18,21 @@ export class UploadService {
   private readonly allowedMimeTypes: string[];
 
   constructor(private readonly config: ConfigService) {
-    const { r2Presign } = config;
+    const { storagePresign } = config;
     this.s3 = new S3Client({
-      region: r2Presign.region,
-      endpoint: r2Presign.endPoint,
+      region: storagePresign.region,
+      endpoint: storagePresign.endPoint,
       credentials: {
-        accessKeyId: r2Presign.accessKeyId,
-        secretAccessKey: r2Presign.secretAccessKey,
+        accessKeyId: storagePresign.accessKeyId,
+        secretAccessKey: storagePresign.secretAccessKey,
       },
       requestChecksumCalculation: 'WHEN_REQUIRED',
     });
-    this.maxSizeBytes = r2Presign.maxSizeBytes;
-    this.bucket = r2Presign.bucket;
-    this.publicBaseUrl = r2Presign.publicBaseUrl;
-    this.expiresIn = r2Presign.expiresIn;
-    this.allowedMimeTypes = r2Presign.allowedTypes.split(',');
+    this.maxSizeBytes = storagePresign.maxSizeBytes;
+    this.bucket = storagePresign.bucket;
+    this.publicBaseUrl = storagePresign.publicBaseUrl;
+    this.expiresIn = storagePresign.expiresIn;
+    this.allowedMimeTypes = storagePresign.allowedTypes.split(',');
   }
 
   async createPresignUpload(fileName: string, mime: string, size: number) {

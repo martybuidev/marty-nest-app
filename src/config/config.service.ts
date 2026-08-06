@@ -5,7 +5,7 @@ import {
   TAppConfig,
   TCorsConfig,
   TDatabaseConfig,
-  TR2PresignConfig,
+  TStoragePresignConfig,
 } from '@/schema';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ConfigService {
         app: TAppConfig;
         database: TDatabaseConfig;
         cors: TCorsConfig;
-        r2Presign: TR2PresignConfig;
+        storagePresign: TStoragePresignConfig;
       },
       true
     >,
@@ -34,7 +34,7 @@ export class ConfigService {
     return this.configService.get('cors', { infer: true });
   }
 
-  get r2Presign(): TR2PresignConfig {
-    return this.configService.get('r2Presign', { infer: true });
+  get storagePresign(): TStoragePresignConfig {
+    return this.configService.get('storagePresign', { infer: true });
   }
 }

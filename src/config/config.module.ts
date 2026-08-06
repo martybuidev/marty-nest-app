@@ -5,7 +5,7 @@ import {
   appConfig,
   crosConfig,
   databaseConfig,
-  r2PresignConfig,
+  storagePresignConfig,
 } from './config';
 import { ConfigService } from './config.service';
 
@@ -15,7 +15,7 @@ import { ConfigService } from './config.service';
     NestConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [appConfig, databaseConfig, crosConfig, r2PresignConfig],
+      load: [appConfig, databaseConfig, crosConfig, storagePresignConfig],
     }),
   ],
   providers: [ConfigService],

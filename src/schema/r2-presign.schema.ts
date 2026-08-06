@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const r2PresignSchema = z.object({
+export const storagePresignSchema = z.object({
   maxSizeBytes: z.coerce.number().int().positive().default(5242880),
   allowedTypes: z.string().min(1),
   region: z.string().min(1),
@@ -13,4 +13,4 @@ export const r2PresignSchema = z.object({
   expiresIn: z.coerce.number().int().positive().default(60),
 });
 
-export type TR2PresignConfig = z.infer<typeof r2PresignSchema>;
+export type TStoragePresignConfig = z.infer<typeof storagePresignSchema>;
