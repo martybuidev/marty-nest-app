@@ -1,27 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { Repository } from 'typeorm';
+
+import { generateSlug } from '@/common/util';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
+  async create(createProductDto: CreateProductDto) {
+    const sku = createProductDto.sku;
+    const existingSku = await this.productRepository.findOneBy({ sku });
+
+    if (existingSku)
+      throw new ConflictException(
+        `A product with "${sku}" SKU is taken! Please choose a different SKU.`,
+      );
+
+    let slug = generateSlug(createProductDto.name);
+    const existingSlug = await this.productRepository.findOneBy({ slug });
+
+    if (existingSlug) slug = slug + '-' + sku;
+
+    const createdProduct = this.productRepository.create({
+      ...createProductDto,
+      slug,
+    });
+
+    return await this.productRepository.save(createdProduct);
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    return await this.productRepository.find({ relations: { images: true } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    return await this.productRepository.findOneOrFail({
+      where: { id },
+      relations: { images: true },
+    });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const product = await this.productRepository.findOneByOrFail({ id });
+    const newName = updateProductDto.name;
+
+    if (newName && newName !== product.name) {
+      let newSlug = generateSlug(newName);
+      const existingSlug = await this.productRepository.findOneBy({
+        slug: newSlug,
+      });
+      if (existingSlug) newSlug = newSlug + '-' + product.sku;
+    }
+
+    const updatedProduct = this.productRepository.merge(
+      product,
+      updateProductDto,
+    );
+    return await this.productRepository.save(updatedProduct);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    await this.productRepository.findOneByOrFail({ id });
+
+    return this.productRepository.delete({ id });
   }
 }

@@ -45,7 +45,7 @@ export class Product extends CommonBaseEntity {
   @Column({ name: 'stock_quantity', type: 'smallint' })
   stockQuantity: number;
 
-  @OneToMany(() => Image, (image) => image.product)
+  @OneToMany(() => Image, (image) => image.product, { cascade: true })
   images: Image[];
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
