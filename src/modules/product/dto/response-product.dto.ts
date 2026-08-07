@@ -1,6 +1,6 @@
 import { Expose, Transform, Type } from 'class-transformer';
 
-import { ResponseStorageDto } from '@/modules/storage/dto/response-storage.dto';
+import { ResponseMediaDto } from '@/modules/media/dto/response-media.dto';
 
 import { Product } from '../entities/product.entity';
 
@@ -37,6 +37,6 @@ export class ResponseProductDto {
   price: number;
 
   @Expose()
-  @Type(() => ResponseStorageDto)
-  storages: ResponseStorageDto[];
+  @Type(() => ResponseMediaDto)
+  medias: ResponseMediaDto[];
 }

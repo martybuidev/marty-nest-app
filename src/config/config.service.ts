@@ -5,7 +5,8 @@ import {
   TAppConfig,
   TCorsConfig,
   TDatabaseConfig,
-  TStoragePresignConfig,
+  TStorageR2Config,
+  TUploadConfig,
 } from '@/schema';
 
 @Injectable()
@@ -16,7 +17,8 @@ export class ConfigService {
         app: TAppConfig;
         database: TDatabaseConfig;
         cors: TCorsConfig;
-        storagePresign: TStoragePresignConfig;
+        upload: TUploadConfig;
+        storageR2: TStorageR2Config;
       },
       true
     >,
@@ -34,7 +36,11 @@ export class ConfigService {
     return this.configService.get('cors', { infer: true });
   }
 
-  get storagePresign(): TStoragePresignConfig {
-    return this.configService.get('storagePresign', { infer: true });
+  get upload(): TUploadConfig {
+    return this.configService.get('upload', { infer: true });
+  }
+
+  get storageR2(): TStorageR2Config {
+    return this.configService.get('storageR2', { infer: true });
   }
 }

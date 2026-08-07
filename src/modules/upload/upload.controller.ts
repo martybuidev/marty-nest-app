@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { PresignDto } from './dto/upload.dto';
+import { Serialize } from '@/common/decorator';
+
+import { createUploadTicketDto } from './dto/create-upload-ticket.dto';
+import { ResponseUploadTicketDto } from './dto/response-upload-ticket.dto';
 import { UploadService } from './upload.service';
 
 @ApiTags('Upload')
@@ -9,9 +12,10 @@ import { UploadService } from './upload.service';
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
-  @Get('presign')
-  presign(@Query() query: PresignDto) {
+  @Get('ticket')
+  @Serialize(ResponseUploadTicketDto)
+  createUploadTicket(@Query() query: createUploadTicketDto) {
     const { fileName, mime, size } = query;
-    return this.uploadService.createPresignUpload(fileName, mime, size);
+    return this.uploadService.createUploadTicket(fileName, mime, size);
   }
 }

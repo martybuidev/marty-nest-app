@@ -41,13 +41,13 @@ export class ProductService {
   }
 
   async findAll() {
-    return await this.productRepository.find({ relations: { storages: true } });
+    return await this.productRepository.find({ relations: { medias: true } });
   }
 
   async findOne(id: number) {
     return await this.productRepository.findOneOrFail({
       where: { id },
-      relations: { storages: true },
+      relations: { medias: true },
     });
   }
 
