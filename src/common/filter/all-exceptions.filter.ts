@@ -3,14 +3,13 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  HttpStatus,
+  InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 
 import { Response } from 'express';
 import { EntityNotFoundError } from 'typeorm';
-
-import { IApiErrorResponse } from '../type';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -23,32 +22,28 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       const statusCode = exception.getStatus();
       const res = exception.getResponse();
+
       return response.status(statusCode).json(res);
     }
 
     if (exception instanceof EntityNotFoundError) {
-      this.logger.error(`Entity Not Found ${exception.message}`);
-      const body: IApiErrorResponse = {
-        statusCode: HttpStatus.NOT_FOUND,
-        message: 'Resource not found',
-        error: 'Not found',
-      };
-      return response.status(HttpStatus.NOT_FOUND).json(body);
+      const notFoundEx = new NotFoundException('Resource not found');
+
+      return response
+        .status(notFoundEx.getStatus())
+        .json(notFoundEx.getResponse());
     }
 
-    const status = HttpStatus.INTERNAL_SERVER_ERROR;
-
     const message =
-      exception instanceof Error ? exception.message : 'Unknown error';
+      exception instanceof Error ? exception.message : 'Unknown Error';
     const stack = exception instanceof Error ? exception.stack : undefined;
 
-    this.logger.error(`Unhandled Exception: ${message}`, stack);
+    this.logger.error({ message, stack });
 
-    const body: IApiErrorResponse = {
-      statusCode: status,
-      message: 'Internal server error',
-      error: 'Internal Server Error',
-    };
-    return response.status(status).json(body);
+    const internalException = new InternalServerErrorException();
+
+    return response
+      .status(internalException.getStatus())
+      .json(internalException.getResponse());
   }
 }

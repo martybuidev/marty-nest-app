@@ -1,10 +1,18 @@
 import { registerAs } from '@nestjs/config';
 
-import { appSchema, databaseSchema } from '@/schema';
+import { appSchema, corsSchema, databaseSchema } from '@/schema';
+
+export const crosConfig = registerAs('cors', () => {
+  return corsSchema.parse({
+    origin: process.env.CROSS_ORIGIN,
+  });
+});
 
 export const appConfig = registerAs('app', () => {
   return appSchema.parse({
     port: process.env.PORT,
+    rateTtl: process.env.RATE_TTL,
+    rateLimit: process.env.RATE_LIMIT,
   });
 });
 

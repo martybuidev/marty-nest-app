@@ -8,7 +8,7 @@ import {
 import { Response } from 'express';
 import { map } from 'rxjs/operators';
 
-import { IApiSuccessResponse } from '../type';
+import { IApiSuccessResponse } from '@/common/type';
 
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<
@@ -23,7 +23,7 @@ export class TransformInterceptor<T> implements NestInterceptor<
       map((data: T): IApiSuccessResponse<T> => {
         return {
           statusCode,
-          message: 'Success',
+          message: 'OK',
           data,
         };
       }),
