@@ -1,8 +1,6 @@
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
-import { ResponseStorageDto } from '@/modules/storage/dto/response-storage.dto';
-
-import { Product } from '../entities/product.entity';
+import { ResponseMediaDto } from '@/modules/media/dto/response-media.dto';
 
 export class ResponseProductDto {
   @Expose()
@@ -12,8 +10,7 @@ export class ResponseProductDto {
   brandName: string;
 
   @Expose()
-  @Transform(({ obj }: { obj: Product }) => obj.category?.name)
-  categoryName: string;
+  categoryId: number;
 
   @Expose()
   name: string;
@@ -28,6 +25,6 @@ export class ResponseProductDto {
   price: number;
 
   @Expose()
-  @Type(() => ResponseStorageDto)
-  storages: ResponseStorageDto[];
+  @Type(() => ResponseMediaDto)
+  medias: ResponseMediaDto[];
 }

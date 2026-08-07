@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
@@ -12,15 +14,17 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CreateStorageDto } from '@/modules/storage/dto/create-storage.dto';
+import { CreateMediaDto } from '@/modules/media/dto/create-media.dto';
 
 export class CreateProductDto {
   @IsInt()
   @Min(1)
+  @ApiProperty({ example: 100 })
   categoryId: number;
 
   @IsString()
   @MaxLength(20)
+  @ApiProperty({ example: `SKU - ${Date.now()}` })
   sku: string;
 
   @IsString()
@@ -51,6 +55,6 @@ export class CreateProductDto {
   @IsArray()
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
-  @Type(() => CreateStorageDto)
-  storages: CreateStorageDto[];
+  @Type(() => CreateMediaDto)
+  medias: CreateMediaDto[];
 }

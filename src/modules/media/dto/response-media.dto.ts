@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class ResponseStorageDto {
+export class ResponseMediaDto {
   @Expose()
   name: string;
 
