@@ -38,13 +38,13 @@ export class ProductService {
   }
 
   async findAll() {
-    return await this.productRepository.find({ relations: { images: true } });
+    return await this.productRepository.find({ relations: { storages: true } });
   }
 
   async findOne(id: number) {
     return await this.productRepository.findOneOrFail({
       where: { id },
-      relations: { images: true },
+      relations: { storages: true },
     });
   }
 
