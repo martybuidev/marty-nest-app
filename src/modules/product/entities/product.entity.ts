@@ -9,8 +9,8 @@ import {
 
 import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Category } from '@/modules/category/entities/category.entity';
+import { Image } from '@/modules/image/entities/image.entity';
 import { OrderItem } from '@/modules/order/entities/order-item.entity';
-import { Storage } from '@/modules/storage/entities/storage.entity';
 
 @Entity('products')
 @Check(`"price" >= 0 and "stock_quantity" >= 0`)
@@ -45,8 +45,8 @@ export class Product extends CommonBaseEntity {
   @Column({ name: 'stock_quantity', type: 'smallint' })
   stockQuantity: number;
 
-  @OneToMany(() => Storage, (storage) => storage.product, { cascade: true })
-  storages: Storage[];
+  @OneToMany(() => Image, (image) => image.product, { cascade: true })
+  images: Image[];
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems: OrderItem[];

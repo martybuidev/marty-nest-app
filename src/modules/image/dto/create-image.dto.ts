@@ -8,7 +8,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class CreateStorageDto {
+export class CreateImageDto {
   @IsOptional()
   @IsString()
   @MaxLength(50)

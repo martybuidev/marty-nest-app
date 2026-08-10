@@ -12,7 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CreateStorageDto } from '@/modules/storage/dto/create-storage.dto';
+import { CreateImageDto } from '@/modules/image/dto/create-image.dto';
 
 export class CreateProductDto {
   @IsInt()
@@ -51,6 +51,6 @@ export class CreateProductDto {
   @IsArray()
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
-  @Type(() => CreateStorageDto)
-  storages: CreateStorageDto[];
+  @Type(() => CreateImageDto)
+  images: CreateImageDto[];
 }
