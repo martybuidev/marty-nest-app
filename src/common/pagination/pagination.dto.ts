@@ -1,17 +1,14 @@
 import { Type } from 'class-transformer';
 import { IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
 
-import {
-  PAGINATION_ORDER,
-  type TPaginationOrder,
-} from '../constant/pagination.constant';
+import { PAGINATION_ORDER, type TPaginationOrder } from '../constant';
 
 export class PaginationDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  page?: number = 1;
+  page?: number;
 
   @IsOptional()
   @Type(() => Number)
@@ -22,5 +19,5 @@ export class PaginationDto {
 
   @IsOptional()
   @IsIn(Object.keys(PAGINATION_ORDER))
-  order?: TPaginationOrder = PAGINATION_ORDER.DESC;
+  order?: TPaginationOrder;
 }
