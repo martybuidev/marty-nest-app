@@ -6,7 +6,6 @@ export interface ICreateUploadTicketInput {
 export interface IUploadTicket {
   uploadUrl: string;
   publicUrl: string;
-  //TODO replace hard code later
   method?: 'PUT' | 'POST';
   headers?: Record<string, string>;
   fields?: Record<string, string>;
