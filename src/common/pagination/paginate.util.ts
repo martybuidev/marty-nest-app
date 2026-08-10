@@ -3,14 +3,13 @@ import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
 import { PAGINATION_DEFAULT, PAGINATION_ORDER } from '../constant';
 import { PaginationDto } from './pagination.dto';
-import { ResponsePaginationMetaDto } from './response-pagination-meta.dto';
 
 export async function paginate<T extends ObjectLiteral, D>(
   queryBuilder: SelectQueryBuilder<T>,
   query: PaginationDto & { sortBy?: string },
   itemsDto: ClassConstructor<D>,
   sortByMap: Record<string, string>,
-): Promise<{ items: D[]; meta: ResponsePaginationMetaDto }> {
+): Promise<{ items: D[]; meta }> {
   const page = query.page ?? PAGINATION_DEFAULT.PAGE;
   const pageSize = query.pageSize ?? PAGINATION_DEFAULT.PAGE_SIZE;
   const order = query.order ?? PAGINATION_ORDER.DESC;
