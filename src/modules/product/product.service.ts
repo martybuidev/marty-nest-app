@@ -19,15 +19,18 @@ export class ProductService {
     const sku = createProductDto.sku;
     const existingSku = await this.productRepository.findOneBy({ sku });
 
-    if (existingSku)
+    if (existingSku) {
       throw new ConflictException(
         `A product with "${sku}" SKU is taken! Please choose a different SKU.`,
       );
+    }
 
     let slug = generateSlug(createProductDto.name);
     const existingSlug = await this.productRepository.findOneBy({ slug });
 
-    if (existingSlug) slug = slug + '-' + sku;
+    if (existingSlug) {
+      slug = slug + '-' + sku;
+    }
 
     const createdProduct = this.productRepository.create({
       ...createProductDto,
@@ -51,13 +54,16 @@ export class ProductService {
   async update(id: number, updateProductDto: UpdateProductDto) {
     const product = await this.productRepository.findOneByOrFail({ id });
     const newName = updateProductDto.name;
+    const isNameChanged = newName && newName !== product.name;
 
-    if (newName && newName !== product.name) {
+    if (isNameChanged) {
       let newSlug = generateSlug(newName);
       const existingSlug = await this.productRepository.findOneBy({
         slug: newSlug,
       });
-      if (existingSlug) newSlug = newSlug + '-' + product.sku;
+      if (existingSlug) {
+        newSlug = newSlug + '-' + product.sku;
+      }
     }
 
     const updatedProduct = this.productRepository.merge(
