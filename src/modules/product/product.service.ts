@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { PAGINATION_SORTBY_PRODUCT } from '@/common/constant';
+import { OrmFilterFactory } from '@/common/pagination/orm-filter.factory';
 import { paginate } from '@/common/pagination/paginate.util';
 import { generateSlug } from '@/common/util';
 
@@ -18,6 +19,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly filterBuilder: OrmFilterFactory,
   ) {}
   async create(createProductDto: CreateProductDto) {
     const sku = createProductDto.sku;
@@ -44,7 +46,7 @@ export class ProductService {
     return await this.productRepository.save(createdProduct);
   }
 
-  async findAll({
+  async findList({
     name,
     brandName,
     categoryId,
@@ -58,38 +60,14 @@ export class ProductService {
       .leftJoinAndSelect('p.category', 'category')
       .leftJoinAndSelect('p.medias', 'medias');
 
-    if (name) {
-      queryBuilder.andWhere('p.name ILIKE :name', { name: `%${name}%` });
-    }
-
-    if (brandName) {
-      queryBuilder.andWhere('p.brandName ILIKE :brandName', {
-        brandName: `%${brandName}%`,
-      });
-    }
-
-    if (categoryId !== undefined) {
-      queryBuilder.andWhere('p.categoryId = :categoryId', {
-        categoryId,
-      });
-    }
-
-    if (minPrice !== undefined) {
-      queryBuilder.andWhere('p.price >= :minPrice', {
-        minPrice,
-      });
-    }
-
-    if (maxPrice !== undefined) {
-      queryBuilder.andWhere('p.price <= :maxPrice', {
-        maxPrice,
-      });
-    }
-    if (inStock !== undefined) {
-      queryBuilder.andWhere(
-        inStock ? 'p.stockQuantity > 0' : 'p.stockQuantity <= 0',
-      );
-    }
+    this.filterBuilder
+      .create(queryBuilder)
+      .ilike(`p.name`, name)
+      .ilike('p.brandName', brandName)
+      .equal('p.categoryId', categoryId)
+      .gte('p.price', minPrice)
+      .lte('p.price', maxPrice)
+      .booleanCondition('p.stockQuantity', inStock, '>', '<=', 0);
 
     const productPagination = paginate<Product, ResponseProductDto>(
       queryBuilder,
@@ -101,7 +79,7 @@ export class ProductService {
     return productPagination;
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number) {
     return await this.productRepository.findOneOrFail({
       where: { id },
       relations: { medias: true },
