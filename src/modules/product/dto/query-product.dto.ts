@@ -42,11 +42,9 @@ export class QueryProductDto extends PaginationDto {
   maxPrice?: number;
 
   @IsOptional()
-  @Transform(({ value }) => {
-    if (value === undefined || value === '') return undefined;
-    if (value === 'true') return true;
-    return false;
-  })
+  @Transform(({ value }) =>
+    value === undefined ? undefined : value === 'true',
+  )
   @IsBoolean()
   inStock?: boolean;
 
