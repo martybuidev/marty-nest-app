@@ -46,6 +46,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
   app.useGlobalInterceptors(
     new TransformInterceptor(),
     new LoggingInterceptor(),

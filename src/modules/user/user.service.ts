@@ -40,10 +40,19 @@ export class UserService {
     return await this.userRepository.findOneByOrFail({ id });
   }
 
+  async findOneByEmail(email: string) {
+    return await this.userRepository
+      .createQueryBuilder('u')
+      .addSelect('u.password')
+      .where('u.email = :email', { email })
+      .getOne();
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOneByOrFail({ id });
     const newEmail = updateUserDto.email;
     const isEmailChanged = newEmail && newEmail !== user.email;
+    const newPassword = updateUserDto.password;
 
     if (isEmailChanged) {
       const existingEmail = await this.userRepository.existsBy({
@@ -57,6 +66,10 @@ export class UserService {
       }
     }
 
+    if (newPassword) {
+      const hashedNewPassword = await hash(newPassword);
+      updateUserDto.password = hashedNewPassword;
+    }
     const updatedUser = this.userRepository.merge(user, updateUserDto);
     return await this.userRepository.save(updatedUser);
   }
