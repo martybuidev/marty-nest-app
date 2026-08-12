@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import { trim } from '@/common/decorator';
+import { Trim } from '@/common/decorator';
 
 export class RegisterDto {
   @Transform(({ value }: TransformFnParams) =>
@@ -20,7 +20,7 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  @trim()
+  @Trim()
   fullName: string;
 
   @IsString()

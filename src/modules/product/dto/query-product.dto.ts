@@ -8,11 +8,12 @@ import {
   Min,
 } from 'class-validator';
 
+import { PaginationDto } from '@/common/pagination/pagination.dto';
+
 import {
   PAGINATION_SORTBY_PRODUCT,
   type TPaginationSortByProduct,
-} from '@/common/constant';
-import { PaginationDto } from '@/common/pagination/pagination.dto';
+} from '../constant/product-pagination.constant';
 
 export class QueryProductDto extends PaginationDto {
   @IsOptional()

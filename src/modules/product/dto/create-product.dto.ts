@@ -14,6 +14,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+import { ToUpperCase, Trim } from '@/common/decorator';
 import { CreateMediaDto } from '@/modules/media/dto/create-media.dto';
 
 export class CreateProductDto {
@@ -25,18 +26,23 @@ export class CreateProductDto {
   @IsString()
   @MaxLength(20)
   @ApiProperty({ example: `SKU - ${Date.now()}` })
+  @Trim()
+  @ToUpperCase()
   sku: string;
 
   @IsString()
   @MaxLength(255)
+  @Trim()
   brandName: string;
 
   @IsString()
   @MaxLength(255)
+  @Trim()
   name: string;
 
   @IsString()
   @IsOptional()
+  @Trim()
   description?: string;
 
   @IsNumber({

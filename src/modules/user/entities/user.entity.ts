@@ -3,7 +3,7 @@ import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { EUserRole } from '@/common/enum/user-role.enum';
 import { EUserStatus } from '@/common/enum/user-status.enum';
-import { RefreshToken } from '@/modules/auth/entities/reresh-token.entity';
+import { RefreshToken } from '@/modules/auth/entities/refresh-token.entity';
 
 @Entity('users')
 export class User extends CommonBaseEntity {

@@ -23,7 +23,7 @@ export class ProductService {
   ) {}
   async create(createProductDto: CreateProductDto) {
     const sku = createProductDto.sku;
-    const existingSku = await this.productRepository.findOneBy({ sku });
+    const existingSku = await this.productRepository.existsBy({ sku });
 
     if (existingSku) {
       throw new ConflictException(
@@ -32,7 +32,7 @@ export class ProductService {
     }
 
     let slug = generateSlug(createProductDto.name);
-    const existingSlug = await this.productRepository.findOneBy({ slug });
+    const existingSlug = await this.productRepository.existsBy({ slug });
 
     if (existingSlug) {
       slug = slug + '-' + sku;
