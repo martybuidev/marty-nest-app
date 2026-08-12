@@ -4,14 +4,17 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 import { Serialize } from '@/common/decorator';
 
 import { CreateProductDto } from './dto/create-product.dto';
+import { QueryProductDto } from './dto/query-product.dto';
 import { ResponseProductDto } from './dto/response-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductService } from './product.service';
@@ -22,32 +25,33 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create new product' })
   @Serialize(ResponseProductDto)
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }
 
   @Get()
-  @Serialize(ResponseProductDto)
-  findAll() {
-    return this.productService.findAll();
+  findList(@Query() query: QueryProductDto) {
+    return this.productService.findList(query);
   }
 
   @Get(':id')
   @Serialize(ResponseProductDto)
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  findOneById(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.findOneById(id);
   }
 
   @Patch(':id')
   @Serialize(ResponseProductDto)
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productService.update(id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.remove(id);
   }
 }

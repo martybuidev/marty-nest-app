@@ -4,7 +4,8 @@ import {
   appSchema,
   corsSchema,
   databaseSchema,
-  storagePresignSchema,
+  storageR2Schema,
+  uploadSchema,
 } from '@/schema';
 
 export const crosConfig = registerAs('cors', () => {
@@ -32,10 +33,15 @@ export const databaseConfig = registerAs('database', () => {
   });
 });
 
-export const storagePresignConfig = registerAs('storagePresign', () => {
-  return storagePresignSchema.parse({
-    maxSizeBytes: process.env.STORAGE_EXPIRES_IN_MAX_SIZE_BYTES,
+export const uploadConfig = registerAs('upload', () => {
+  return uploadSchema.parse({
+    maxSizeBytes: process.env.STORAGE_MAX_SIZE_BYTES,
     allowedTypes: process.env.STORAGE_ALLOWED_TYPES,
+  });
+});
+
+export const storageR2Config = registerAs('storageR2', () => {
+  return storageR2Schema.parse({
     region: process.env.STORAGE_REGION,
     accountId: process.env.STORAGE_ACCOUNT_ID,
     endPoint: process.env.STORAGE_ENDPOINT,

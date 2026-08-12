@@ -3,12 +3,12 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Product } from '@/modules/product/entities/product.entity';
 
-@Entity('images')
-export class Image extends CommonBaseEntity {
+@Entity('medias')
+export class Media extends CommonBaseEntity {
   @Column({ name: 'product_id' })
   productId: number;
 
-  @ManyToOne(() => Product, (product) => product.images, {
+  @ManyToOne(() => Product, (product) => product.medias, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'product_id' })

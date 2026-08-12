@@ -3,9 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
+import { PAGINATION_SORTBY_PRODUCT } from '@/common/constant';
+import { OrmFilterFactory } from '@/common/pagination/orm-filter.factory';
+import { paginate } from '@/common/pagination/paginate.util';
 import { generateSlug } from '@/common/util';
 
 import { CreateProductDto } from './dto/create-product.dto';
+import { QueryProductDto } from './dto/query-product.dto';
+import { ResponseProductDto } from './dto/response-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
@@ -14,20 +19,24 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly filterBuilder: OrmFilterFactory,
   ) {}
   async create(createProductDto: CreateProductDto) {
     const sku = createProductDto.sku;
     const existingSku = await this.productRepository.findOneBy({ sku });
 
-    if (existingSku)
+    if (existingSku) {
       throw new ConflictException(
         `A product with "${sku}" SKU is taken! Please choose a different SKU.`,
       );
+    }
 
     let slug = generateSlug(createProductDto.name);
     const existingSlug = await this.productRepository.findOneBy({ slug });
 
-    if (existingSlug) slug = slug + '-' + sku;
+    if (existingSlug) {
+      slug = slug + '-' + sku;
+    }
 
     const createdProduct = this.productRepository.create({
       ...createProductDto,
@@ -37,27 +46,59 @@ export class ProductService {
     return await this.productRepository.save(createdProduct);
   }
 
-  async findAll() {
-    return await this.productRepository.find({ relations: { images: true } });
+  async findList({
+    name,
+    brandName,
+    categoryId,
+    maxPrice,
+    minPrice,
+    inStock,
+    ...query
+  }: QueryProductDto) {
+    const queryBuilder = this.productRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.category', 'category')
+      .leftJoinAndSelect('p.medias', 'medias');
+
+    this.filterBuilder
+      .create(queryBuilder)
+      .ilike(`p.name`, name)
+      .ilike('p.brandName', brandName)
+      .equal('p.categoryId', categoryId)
+      .gte('p.price', minPrice)
+      .lte('p.price', maxPrice)
+      .booleanCondition('p.stockQuantity', inStock, '>', '<=', 0);
+
+    const productPagination = paginate<Product, ResponseProductDto>(
+      queryBuilder,
+      query,
+      ResponseProductDto,
+      PAGINATION_SORTBY_PRODUCT,
+    );
+
+    return productPagination;
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number) {
     return await this.productRepository.findOneOrFail({
       where: { id },
-      relations: { images: true },
+      relations: { medias: true },
     });
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     const product = await this.productRepository.findOneByOrFail({ id });
     const newName = updateProductDto.name;
+    const isNameChanged = newName && newName !== product.name;
 
-    if (newName && newName !== product.name) {
+    if (isNameChanged) {
       let newSlug = generateSlug(newName);
       const existingSlug = await this.productRepository.findOneBy({
         slug: newSlug,
       });
-      if (existingSlug) newSlug = newSlug + '-' + product.sku;
+      if (existingSlug) {
+        newSlug = newSlug + '-' + product.sku;
+      }
     }
 
     const updatedProduct = this.productRepository.merge(

@@ -1,8 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsString, Min } from 'class-validator';
+import { IsInt, IsString, MaxLength, Min } from 'class-validator';
 
-export class PresignDto {
+export class createUploadTicketDto {
   @IsString()
+  @MaxLength(255)
   fileName: string;
 
   @IsString()

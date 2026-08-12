@@ -1,15 +1,21 @@
 import { Expose, Transform, Type } from 'class-transformer';
 
-import { ResponseImageDto } from '@/modules/image/dto/response-image.dto';
+import { ResponseMediaDto } from '@/modules/media/dto/response-media.dto';
 
 import { Product } from '../entities/product.entity';
 
 export class ResponseProductDto {
   @Expose()
+  id: number;
+
+  @Expose()
   sku: string;
 
   @Expose()
   brandName: string;
+
+  @Expose()
+  categoryId: number;
 
   @Expose()
   @Transform(({ obj }: { obj: Product }) => obj.category?.name)
@@ -25,9 +31,12 @@ export class ResponseProductDto {
   description: string;
 
   @Expose()
+  stockQuantity: number;
+
+  @Expose()
   price: number;
 
   @Expose()
-  @Type(() => ResponseImageDto)
-  images: ResponseImageDto[];
+  @Type(() => ResponseMediaDto)
+  medias: ResponseMediaDto[];
 }

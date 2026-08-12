@@ -1,8 +1,6 @@
 import z from 'zod';
 
-export const storagePresignSchema = z.object({
-  maxSizeBytes: z.coerce.number().int().positive().default(5242880),
-  allowedTypes: z.string().min(1),
+export const storageR2Schema = z.object({
   region: z.string().min(1),
   accountId: z.string().min(1),
   endPoint: z.string().min(1),
@@ -13,4 +11,4 @@ export const storagePresignSchema = z.object({
   expiresIn: z.coerce.number().int().positive().default(60),
 });
 
-export type TStoragePresignConfig = z.infer<typeof storagePresignSchema>;
+export type TStorageR2Config = z.infer<typeof storageR2Schema>;
