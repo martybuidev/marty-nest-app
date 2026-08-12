@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
-import { PAGINATION_SORTBY_PRODUCT } from '@/common/constant';
 import { OrmFilterFactory } from '@/common/pagination/orm-filter.factory';
 import { paginate } from '@/common/pagination/paginate.util';
 import { generateSlug } from '@/common/util';
 
+import { PAGINATION_SORTBY_PRODUCT } from './constant/product-pagination.constant';
 import { CreateProductDto } from './dto/create-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { ResponseProductDto } from './dto/response-product.dto';

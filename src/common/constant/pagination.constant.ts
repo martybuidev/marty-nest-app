@@ -10,11 +10,3 @@ export const PAGINATION_ORDER = {
 } as const;
 
 export type TPaginationOrder = keyof typeof PAGINATION_ORDER;
-
-export const PAGINATION_SORTBY_PRODUCT = {
-  createdAt: 'p.createdAt',
-  name: 'p.name',
-  price: 'p.price',
-} as const;
-
-export type TPaginationSortByProduct = keyof typeof PAGINATION_SORTBY_PRODUCT;
