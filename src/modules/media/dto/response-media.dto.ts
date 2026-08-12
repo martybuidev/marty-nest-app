@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class ResponseCategoryDto {
+export class ResponseMediaDto {
   @Expose()
   id: number;
 
@@ -8,8 +8,11 @@ export class ResponseCategoryDto {
   name: string;
 
   @Expose()
-  slug: string;
+  url?: string;
 
   @Expose()
-  description: string;
+  alt?: string;
+
+  @Expose()
+  isPrimary?: boolean;
 }

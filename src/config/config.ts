@@ -1,6 +1,12 @@
 import { registerAs } from '@nestjs/config';
 
-import { appSchema, corsSchema, databaseSchema } from '@/schema';
+import {
+  appSchema,
+  corsSchema,
+  databaseSchema,
+  storageR2Schema,
+  uploadSchema,
+} from '@/schema';
 
 export const crosConfig = registerAs('cors', () => {
   return corsSchema.parse({
@@ -24,5 +30,25 @@ export const databaseConfig = registerAs('database', () => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+  });
+});
+
+export const uploadConfig = registerAs('upload', () => {
+  return uploadSchema.parse({
+    maxSizeBytes: process.env.STORAGE_MAX_SIZE_BYTES,
+    allowedTypes: process.env.STORAGE_ALLOWED_TYPES,
+  });
+});
+
+export const storageR2Config = registerAs('storageR2', () => {
+  return storageR2Schema.parse({
+    region: process.env.STORAGE_REGION,
+    accountId: process.env.STORAGE_ACCOUNT_ID,
+    endPoint: process.env.STORAGE_ENDPOINT,
+    accessKeyId: process.env.STORAGE_ACCESS_KEY_ID,
+    secretAccessKey: process.env.STORAGE_SECRET_ACCESS_KEY,
+    bucket: process.env.STORAGE_BUCKET,
+    publicBaseUrl: process.env.STORAGE_PUBLIC_BASE_URL,
+    expiresIn: process.env.STORAGE_EXPIRES_IN,
   });
 });

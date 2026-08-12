@@ -9,7 +9,7 @@ import {
 
 import { CommonBaseEntity } from '@/common/entity/base.entity';
 import { Category } from '@/modules/category/entities/category.entity';
-import { Image } from '@/modules/image/entities/image.entity';
+import { Media } from '@/modules/media/entities/media.entity';
 import { OrderItem } from '@/modules/order/entities/order-item.entity';
 
 @Entity('products')
@@ -45,8 +45,8 @@ export class Product extends CommonBaseEntity {
   @Column({ name: 'stock_quantity', type: 'smallint' })
   stockQuantity: number;
 
-  @OneToMany(() => Image, (image) => image.product)
-  images: Image[];
+  @OneToMany(() => Media, (media) => media.product, { cascade: true })
+  medias: Media[];
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems: OrderItem[];

@@ -1,0 +1,42 @@
+import { Expose, Transform, Type } from 'class-transformer';
+
+import { ResponseMediaDto } from '@/modules/media/dto/response-media.dto';
+
+import { Product } from '../entities/product.entity';
+
+export class ResponseProductDto {
+  @Expose()
+  id: number;
+
+  @Expose()
+  sku: string;
+
+  @Expose()
+  brandName: string;
+
+  @Expose()
+  categoryId: number;
+
+  @Expose()
+  @Transform(({ obj }: { obj: Product }) => obj.category?.name)
+  categoryName: string;
+
+  @Expose()
+  name: string;
+
+  @Expose()
+  slug: string;
+
+  @Expose()
+  description: string;
+
+  @Expose()
+  stockQuantity: number;
+
+  @Expose()
+  price: number;
+
+  @Expose()
+  @Type(() => ResponseMediaDto)
+  medias: ResponseMediaDto[];
+}
