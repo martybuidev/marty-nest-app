@@ -3,8 +3,9 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 
 import {
   appConfig,
-  crosConfig,
+  corsConfig,
   databaseConfig,
+  jwtConfig,
   storageR2Config,
   uploadConfig,
 } from './config';
@@ -18,8 +19,9 @@ import { ConfigService } from './config.service';
       envFilePath: '.env',
       load: [
         appConfig,
+        jwtConfig,
         databaseConfig,
-        crosConfig,
+        corsConfig,
         uploadConfig,
         storageR2Config,
       ],

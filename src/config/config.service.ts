@@ -8,6 +8,7 @@ import {
   TStorageR2Config,
   TUploadConfig,
 } from '@/schema';
+import { TJwtConfig } from '@/schema/jwt.schema';
 
 @Injectable()
 export class ConfigService {
@@ -15,6 +16,7 @@ export class ConfigService {
     private readonly configService: NestConfigService<
       {
         app: TAppConfig;
+        jwt: TJwtConfig;
         database: TDatabaseConfig;
         cors: TCorsConfig;
         upload: TUploadConfig;
@@ -26,6 +28,10 @@ export class ConfigService {
 
   get app(): TAppConfig {
     return this.configService.get('app', { infer: true });
+  }
+
+  get jwt(): TJwtConfig {
+    return this.configService.get('jwt', { infer: true });
   }
 
   get database(): TDatabaseConfig {

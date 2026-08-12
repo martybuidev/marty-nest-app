@@ -7,8 +7,9 @@ import {
   storageR2Schema,
   uploadSchema,
 } from '@/schema';
+import { jwtSchema } from '@/schema/jwt.schema';
 
-export const crosConfig = registerAs('cors', () => {
+export const corsConfig = registerAs('cors', () => {
   return corsSchema.parse({
     origin: process.env.CROSS_ORIGIN,
   });
@@ -19,6 +20,15 @@ export const appConfig = registerAs('app', () => {
     port: process.env.PORT,
     rateTtl: process.env.RATE_TTL,
     rateLimit: process.env.RATE_LIMIT,
+  });
+});
+
+export const jwtConfig = registerAs('jwt', () => {
+  return jwtSchema.parse({
+    accessSecret: process.env.JWT_ACCESS_SECRET,
+    accessExpiration: process.env.JWT_ACCESS_EXPIRATION,
+    refreshSecret: process.env.JWT_REFRESH_SECRET,
+    refreshExpiration: process.env.JWT_REFRESH_EXPIRATION,
   });
 });
 
