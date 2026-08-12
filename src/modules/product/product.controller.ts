@@ -31,14 +31,14 @@ export class ProductController {
   }
 
   @Get()
-  findAll(@Query() query: QueryProductDto) {
+  findList(@Query() query: QueryProductDto) {
     return this.productService.findList(query);
   }
 
   @Get(':id')
   @Serialize(ResponseProductDto)
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.findOneById(+id);
+  findOneById(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.findOneById(id);
   }
 
   @Patch(':id')
@@ -47,11 +47,11 @@ export class ProductController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    return this.productService.update(+id, updateProductDto);
+    return this.productService.update(id, updateProductDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.remove(+id);
+    return this.productService.remove(id);
   }
 }

@@ -1,9 +1,6 @@
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
-type FilterFn<T extends ObjectLiteral> = (
-  column: string,
-  value: unknown,
-) => OrmFilterBuilder<T>;
+import { FilterFn } from './fn-filter.type';
 
 export class OrmFilterBuilder<T extends ObjectLiteral> {
   constructor(private readonly queryBuilder: SelectQueryBuilder<T>) {}
