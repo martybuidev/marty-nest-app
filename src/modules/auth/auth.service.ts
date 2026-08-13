@@ -92,4 +92,51 @@ export class AuthService {
 
     return this.generateTokens(user, ip, userAgent);
   }
+
+  async refresh(rawRefreshToken: string, ip: string, userAgent: string) {
+    let payload: { sub: number };
+    try {
+      payload = await this.jwtService.verifyAsync(rawRefreshToken, {
+        secret: this.configService.jwt.refreshSecret,
+      });
+    } catch {
+      throw new UnauthorizedException('Refresh token is invalid or expired');
+    }
+
+    const tokenHash = crypto
+      .createHmac('sha256', this.configService.jwt.refreshSecret)
+      .update(rawRefreshToken)
+      .digest('hex');
+
+    const storedToken = await this.refreshTokenRepository.findOne({
+      where: { tokenHash },
+      relations: { user: true },
+    });
+
+    if (
+      !storedToken ||
+      storedToken.revokedAt ||
+      storedToken.expiresAt < new Date()
+    ) {
+      throw new UnauthorizedException('Refresh token is invalid or expired');
+    }
+
+    await this.refreshTokenRepository.update(storedToken.id, {
+      revokedAt: new Date(),
+    });
+
+    return this.generateTokens(storedToken.user, ip, userAgent);
+  }
+
+  async logout(rawRefreshToken: string) {
+    const tokenHash = crypto
+      .createHmac('sha256', this.configService.jwt.refreshSecret)
+      .update(rawRefreshToken)
+      .digest('hex');
+
+    await this.refreshTokenRepository.update(
+      { tokenHash },
+      { revokedAt: new Date() },
+    );
+  }
 }
