@@ -8,23 +8,22 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-import { CurrentUser, Serialize } from '@/common/decorator';
+import { CurrentUser } from '@/common/decorator';
 import { UserAgent } from '@/common/decorator/user-agent.decorator';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
-import { ResponseUserDto } from './dto/response-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { IJwtPayload } from './strategies/jwt.strategy';
+import type { TJwtPayload } from './strategies/jwt.strategy';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @Serialize(ResponseUserDto)
   @Post('register')
   register(
     @Body() registerDto: RegisterDto,
@@ -34,7 +33,6 @@ export class AuthController {
     return this.authService.register(registerDto, ip, userAgent);
   }
 
-  // @Serialize(ResponseUserDto)
   @HttpCode(HttpStatus.OK)
   @Post('login')
   login(
@@ -55,7 +53,6 @@ export class AuthController {
     return this.authService.refresh(refreshToken, ip, userAgent);
   }
 
-  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   logout(@Body() { refreshToken }: RefreshTokenDto) {
@@ -63,8 +60,9 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('me')
-  me(@CurrentUser() user: IJwtPayload) {
+  me(@CurrentUser() user: TJwtPayload) {
     return user;
   }
 }

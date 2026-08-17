@@ -30,11 +30,11 @@ export class AuthService {
   ) {}
 
   private async generateTokens(
-    { id: userId, email, role }: User,
+    { id, email, role }: User,
     ip: string,
     userAgent: string,
   ) {
-    const payload = { sub: userId, email, role };
+    const payload = { sub: id, email, role };
     const { refreshSecret, refreshExpiration } = this.configService.jwt;
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -54,7 +54,7 @@ export class AuthService {
       Date.now() + refreshExpiration * TO_MILLISECONDS,
     );
     await this.refreshTokenRepository.insert({
-      userId,
+      userId: id,
       tokenHash: hashedRefreshToken,
       expiresAt,
       userAgent,
@@ -65,7 +65,7 @@ export class AuthService {
       accessToken,
       refreshToken,
       user: {
-        userId,
+        id,
         email,
         role,
       },
@@ -94,9 +94,8 @@ export class AuthService {
   }
 
   async refresh(rawRefreshToken: string, ip: string, userAgent: string) {
-    let payload: { sub: number };
     try {
-      payload = await this.jwtService.verifyAsync(rawRefreshToken, {
+      await this.jwtService.verifyAsync(rawRefreshToken, {
         secret: this.configService.jwt.refreshSecret,
       });
     } catch {

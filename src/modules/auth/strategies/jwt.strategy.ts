@@ -5,11 +5,11 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { ConfigService } from '@/config/config.service';
 
-export interface IJwtPayload {
+export type TJwtPayload = {
   sub: number;
   email: string;
   role: string;
-}
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: IJwtPayload) {
+  validate(payload: TJwtPayload) {
     return {
       id: payload.sub,
       email: payload.email,

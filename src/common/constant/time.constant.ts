@@ -1,1 +1,1 @@
-export const TO_MILLISECONDS = 10000;
+export const TO_MILLISECONDS = 1000;
