@@ -3,6 +3,7 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 
 import {
   appConfig,
+  authConfig,
   corsConfig,
   databaseConfig,
   jwtConfig,
@@ -24,6 +25,7 @@ import { ConfigService } from './config.service';
         corsConfig,
         uploadConfig,
         storageR2Config,
+        authConfig,
       ],
     }),
   ],

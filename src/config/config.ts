@@ -62,3 +62,9 @@ export const storageR2Config = registerAs('storageR2', () => {
     expiresIn: process.env.STORAGE_EXPIRES_IN,
   });
 });
+
+export const authConfig = registerAs('auth', () => {
+  return uploadSchema.parse({
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+  });
+});

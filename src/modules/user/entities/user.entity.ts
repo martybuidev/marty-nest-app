@@ -11,7 +11,7 @@ export class User extends CommonBaseEntity {
   @Column({ type: 'varchar', length: 255 })
   email: string;
 
-  @Column({ type: 'varchar', length: 255, select: false })
+  @Column({ type: 'varchar', length: 255, select: false, nullable: true })
   password: string;
 
   @Column({ name: 'full_name', type: 'varchar', length: 255 })

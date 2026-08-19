@@ -47,7 +47,22 @@ export class UserService {
       .where('u.email = :email', { email })
       .getOne();
   }
+  async findOrCreateByOAuth({
+    email,
+    fullName,
+  }: {
+    email: string;
+    fullName: string;
+  }) {
+    let user = await this.userRepository.findOneBy({ email });
 
+    if (!user) {
+      user = this.userRepository.create({ email, fullName });
+      user = await this.userRepository.save(user);
+    }
+
+    return user;
+  }
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOneByOrFail({ id });
     const newEmail = updateUserDto.email;

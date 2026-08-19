@@ -3,6 +3,7 @@ import { ConfigService as NestConfigService } from '@nestjs/config';
 
 import {
   TAppConfig,
+  TAuthSConfig,
   TCorsConfig,
   TDatabaseConfig,
   TStorageR2Config,
@@ -21,6 +22,7 @@ export class ConfigService {
         cors: TCorsConfig;
         upload: TUploadConfig;
         storageR2: TStorageR2Config;
+        auth: TAuthSConfig;
       },
       true
     >,
@@ -48,5 +50,9 @@ export class ConfigService {
 
   get storageR2(): TStorageR2Config {
     return this.configService.get('storageR2', { infer: true });
+  }
+
+  get auth(): TAuthSConfig {
+    return this.configService.get('auth', { infer: true });
   }
 }

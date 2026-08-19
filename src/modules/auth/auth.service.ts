@@ -1,12 +1,7 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { verify } from 'argon2';
 import * as crypto from 'crypto';
 import { Repository } from 'typeorm';
 
@@ -18,6 +13,7 @@ import { UserService } from '../user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RefreshToken } from './entities/refresh-token.entity';
+import { AuthStrategyFactory } from './strategies/auth-strategy';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +21,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly userService: UserService,
+    private readonly strategyFactory: AuthStrategyFactory,
     @InjectRepository(RefreshToken)
     private readonly refreshTokenRepository: Repository<RefreshToken>,
   ) {}
@@ -78,16 +75,18 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto, ip: string, userAgent: string) {
-    const user = await this.userService.findOneByEmail(loginDto.email);
-    if (!user) {
-      throw new NotFoundException(
-        `User with ${loginDto.email} email is not found`,
-      );
-    }
+    const strategy = this.strategyFactory.getStrategy(loginDto.provider);
 
-    const matchedPassword = await verify(user.password, loginDto.password);
-    if (!matchedPassword) {
-      throw new UnauthorizedException(`Password is incorrect`);
+    const result = await strategy.validate(loginDto);
+
+    let user: User;
+    if (result.user) {
+      user = result.user;
+    } else {
+      user = await this.userService.findOrCreateByOAuth({
+        email: result.email,
+        fullName: result.fullName || result.email.split('@')[0],
+      });
     }
 
     return this.generateTokens(user, ip, userAgent);
