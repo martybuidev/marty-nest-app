@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { AuthStrategyFactory } from './strategies/auth-strategy';
 import { CredentialAuthStrategy } from './strategies/credential.strategy';
+import { GithubAuthStrategy } from './strategies/github.strategy';
 import { GoogleAuthStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
@@ -35,6 +36,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     JwtStrategy,
     CredentialAuthStrategy,
     GoogleAuthStrategy,
+    GithubAuthStrategy,
     AuthStrategyFactory,
   ],
   exports: [AuthService],

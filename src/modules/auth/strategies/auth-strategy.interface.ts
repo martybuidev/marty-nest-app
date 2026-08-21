@@ -12,3 +12,15 @@ export interface IAuthStrategyResult {
 export interface IAuthStrategy {
   validate(loginDto: LoginDto): Promise<IAuthStrategyResult>;
 }
+export interface IGithubProfile {
+  id: number;
+  login: string;
+  name?: string | null;
+  email?: string | null;
+}
+
+export interface IGithubEmail {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+}

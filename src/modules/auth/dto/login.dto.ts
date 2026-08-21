@@ -7,8 +7,9 @@ import {
 } from 'class-validator';
 
 export enum EAuthProvider {
-  CREDENTIAL = 'credential',
+  CREDENTIALS = 'credentials',
   GOOGLE = 'google',
+  GITHUB = 'github',
 }
 export class LoginDto {
   @IsEnum(EAuthProvider)

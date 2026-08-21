@@ -2,6 +2,7 @@ import { registerAs } from '@nestjs/config';
 
 import {
   appSchema,
+  authSchema,
   corsSchema,
   databaseSchema,
   storageR2Schema,
@@ -64,7 +65,7 @@ export const storageR2Config = registerAs('storageR2', () => {
 });
 
 export const authConfig = registerAs('auth', () => {
-  return uploadSchema.parse({
+  return authSchema.parse({
     googleClientId: process.env.GOOGLE_CLIENT_ID,
   });
 });
