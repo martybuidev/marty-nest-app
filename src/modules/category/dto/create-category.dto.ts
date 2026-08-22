@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-import { trim } from '@/common/decorator';
+import { Trim } from '@/common/decorator';
 
 export class CreateCategoryDto {
   @ApiProperty({
@@ -12,7 +12,7 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  @trim()
+  @Trim()
   name: string;
 
   @ApiProperty({
@@ -20,5 +20,6 @@ export class CreateCategoryDto {
     description: 'Description for category',
   })
   @IsString()
+  @Trim()
   description: string;
 }

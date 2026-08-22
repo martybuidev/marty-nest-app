@@ -2,13 +2,15 @@ import { registerAs } from '@nestjs/config';
 
 import {
   appSchema,
+  authSchema,
   corsSchema,
   databaseSchema,
   storageR2Schema,
   uploadSchema,
 } from '@/schema';
+import { jwtSchema } from '@/schema/jwt.schema';
 
-export const crosConfig = registerAs('cors', () => {
+export const corsConfig = registerAs('cors', () => {
   return corsSchema.parse({
     origin: process.env.CROSS_ORIGIN,
   });
@@ -19,6 +21,15 @@ export const appConfig = registerAs('app', () => {
     port: process.env.PORT,
     rateTtl: process.env.RATE_TTL,
     rateLimit: process.env.RATE_LIMIT,
+  });
+});
+
+export const jwtConfig = registerAs('jwt', () => {
+  return jwtSchema.parse({
+    accessSecret: process.env.JWT_ACCESS_SECRET,
+    accessExpiration: process.env.JWT_ACCESS_EXPIRATION,
+    refreshSecret: process.env.JWT_REFRESH_SECRET,
+    refreshExpiration: process.env.JWT_REFRESH_EXPIRATION,
   });
 });
 
@@ -50,5 +61,11 @@ export const storageR2Config = registerAs('storageR2', () => {
     bucket: process.env.STORAGE_BUCKET,
     publicBaseUrl: process.env.STORAGE_PUBLIC_BASE_URL,
     expiresIn: process.env.STORAGE_EXPIRES_IN,
+  });
+});
+
+export const authConfig = registerAs('auth', () => {
+  return authSchema.parse({
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
   });
 });

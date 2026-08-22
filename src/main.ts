@@ -46,6 +46,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
   app.useGlobalInterceptors(
     new TransformInterceptor(),
     new LoggingInterceptor(),
@@ -56,6 +57,7 @@ async function bootstrap() {
     .setTitle('Marty Nest App API')
     .setDescription('API documentation for Marty Nest Application')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);

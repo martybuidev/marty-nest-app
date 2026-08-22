@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
-import { PAGINATION_SORTBY_PRODUCT } from '@/common/constant';
 import { OrmFilterFactory } from '@/common/pagination/orm-filter.factory';
 import { paginate } from '@/common/pagination/paginate.util';
 import { generateSlug } from '@/common/util';
 
+import { PAGINATION_SORTBY_PRODUCT } from './constant/product-pagination.constant';
 import { CreateProductDto } from './dto/create-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { ResponseProductDto } from './dto/response-product.dto';
@@ -23,7 +23,7 @@ export class ProductService {
   ) {}
   async create(createProductDto: CreateProductDto) {
     const sku = createProductDto.sku;
-    const existingSku = await this.productRepository.findOneBy({ sku });
+    const existingSku = await this.productRepository.existsBy({ sku });
 
     if (existingSku) {
       throw new ConflictException(
@@ -32,7 +32,7 @@ export class ProductService {
     }
 
     let slug = generateSlug(createProductDto.name);
-    const existingSlug = await this.productRepository.findOneBy({ slug });
+    const existingSlug = await this.productRepository.existsBy({ slug });
 
     if (existingSlug) {
       slug = slug + '-' + sku;

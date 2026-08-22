@@ -3,11 +3,13 @@ import { ConfigService as NestConfigService } from '@nestjs/config';
 
 import {
   TAppConfig,
+  TAuthSConfig,
   TCorsConfig,
   TDatabaseConfig,
   TStorageR2Config,
   TUploadConfig,
 } from '@/schema';
+import { TJwtConfig } from '@/schema/jwt.schema';
 
 @Injectable()
 export class ConfigService {
@@ -15,10 +17,12 @@ export class ConfigService {
     private readonly configService: NestConfigService<
       {
         app: TAppConfig;
+        jwt: TJwtConfig;
         database: TDatabaseConfig;
         cors: TCorsConfig;
         upload: TUploadConfig;
         storageR2: TStorageR2Config;
+        auth: TAuthSConfig;
       },
       true
     >,
@@ -26,6 +30,10 @@ export class ConfigService {
 
   get app(): TAppConfig {
     return this.configService.get('app', { infer: true });
+  }
+
+  get jwt(): TJwtConfig {
+    return this.configService.get('jwt', { infer: true });
   }
 
   get database(): TDatabaseConfig {
@@ -42,5 +50,9 @@ export class ConfigService {
 
   get storageR2(): TStorageR2Config {
     return this.configService.get('storageR2', { infer: true });
+  }
+
+  get auth(): TAuthSConfig {
+    return this.configService.get('auth', { infer: true });
   }
 }
